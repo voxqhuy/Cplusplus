@@ -91,6 +91,37 @@ class LinkedList
         return *this;
     }
 
+    // Equality operator
+    bool &operator==(const LinkedList &other)
+    {
+        // Make a local, temporary copy of other
+        LinkedList temp{other};
+
+        // If they have different lens, they are not equal, return false
+        if (len != temp.len) 
+            return false;
+
+        auto cursor = head, temp.cursor = temp.head, // Start at head of list
+            prev = head, tempPrev = temp.head;    // Keep track of previous node seen
+        // Loop until we run off the end of the list or find n,
+        // whichever comes first
+        while (cursor)
+        {
+            // Remember previous node
+            prev = cursor; 
+            tempPrev = temp.cursor;
+            // Check the current values in both lists.
+            if (prev != tempPrev) {
+                return false; // Since they don't match
+            } 
+            // Move to next node    
+            cursor = cursor->next; 
+            temp.cursor = temp.cursor->next;
+        }
+
+        return true; // The two lists contain the same elements in the same order
+    }
+
     // The destructor deallocates the memory held by the list
     ~LinkedList()
     {
@@ -128,11 +159,14 @@ class LinkedList
             head = tail = new_node;
         len++;
     }
+
     // Accepts an argument of the same type as the elements in the list.
     // The function returns true if the argument appears in the list;
     // otherwise, the function returns false.
     bool member(const T &item)
     {
+        auto cursor = head, // Start at head of list
+            prev = head;    // Keep track of previous node seen
         // Loop until we run off the end of the list or find n,
         // whichever comes first
         while (cursor && cursor->data != item)
