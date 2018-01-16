@@ -103,8 +103,7 @@ class LinkedList
 
         auto cursor = head, temp.cursor = temp.head, // Start at head of list
             prev = head, tempPrev = temp.head;    // Keep track of previous node seen
-        // Loop until we run off the end of the list or find n,
-        // whichever comes first
+        // Loop until we run off the end of the list.
         while (cursor)
         {
             // Remember previous node
@@ -212,6 +211,35 @@ class LinkedList
         // No need to delete node; shared_ptr takes care of it
         len--;       // List size decreases by 1
         return true; // We found n and deleted its node
+    }
+
+    // Check the uniqueness of the elements
+    bool unique() {
+        // If the list is empty or contain only one element, it will be unique.
+        if (len < 2) 
+            return true;
+
+        auto cursor = head, // Start at head of list
+            cursorForTesting = head->next,
+            checkingElement = head,    // Keep track of previous node seen
+            testingElement = head->next; // Start comparing the previous with the next node
+        // Loop until we run off the end of the list.
+        while (cursor)
+        {
+            checkingElement = cursor; // Remember previous node
+            cursor = cursor->next; // Move to next node
+            cursorForTesting = cursor->next;
+            // Loop until we run off the end of the list
+            // starting from the "next" node after the checkingElement
+            while (cursorForTesting)
+            {
+                testingElement = cursorForTesting;         // Remember previous node
+                // Check if there is another element exist in the list
+                if (checkingElement == testingElement)
+                    return false; 
+                cursorForTesting = cursorForTesting->next; // Move to next node
+            }
+        }
     }
 
     // Prints the contents of the linked list of integers.
