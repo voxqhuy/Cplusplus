@@ -1,0 +1,45 @@
+{
+    "configurations": [
+        {
+            "name": "gcc",
+            "includePath": [
+                "${workspaceRoot}",
+                "C:/MinGW/include",
+                "C:/MinGW/include/freetype2",
+                "c:/MinGW/include/c++/7.2.0",
+                "c:/MinGW/include/c++/7.2.0/x86_64-w64-mingw32",
+                "c:/MinGW/include/c++/7.2.0/backward",
+                "c:/MinGW/lib/gcc/x86_64-w64-mingw32/7.2.0/include",
+                "c:/MinGW/lib/gcc/x86_64-w64-mingw32/7.2.0/include-fixed",
+                "c:/MinGW/lib/gcc/x86_64-w64-mingw32/7.2.0/x86_64-w64-mingw32/include",
+                "c:/mingw/x86_64-w64-mingw32/include"
+            ],
+            "defines": [
+                "_WIN32",
+                "__MINGW32__",
+                "__GNUC__=7",
+                "_DEBUG",
+                "UNICODE",
+                "__cdecl=__attribute__((__cdecl__))"
+            ],
+            "intelliSenseMode": "clang-x64",
+            "browse": {
+                "path": [
+                    "${workspaceRoot}",
+                    "C:/MinGW/include",
+                    "C:/MinGW/include/freetype2",
+                    "c:/MinGW/include/c++/7.2.0",
+                    "c:/MinGW/include/c++/7.2.0/x86_64-w64-mingw32",
+                    "c:/MinGW/include/c++/7.2.0/backward",
+                    "c:/MinGW/lib/gcc/x86_64-w64-mingw32/7.2.0/include",
+                    "c:/MinGW/lib/gcc/x86_64-w64-mingw32/7.2.0/include-fixed",
+                    "c:/MinGW/lib/gcc/x86_64-w64-mingw32/7.2.0/x86_64-w64-mingw32/include",
+                    "c:/mingw/x86_64-w64-mingw32/include"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            }
+        }
+    ],
+    "version": 3
+}
