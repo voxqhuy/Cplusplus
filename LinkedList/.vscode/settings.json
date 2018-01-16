@@ -49,6 +49,7 @@
         "string_view": "cpp",
         "thread": "cpp",
         "cinttypes": "cpp",
-        "tuple": "cpp"
+        "tuple": "cpp",
+        "cwctype": "cpp"
     }
 }
