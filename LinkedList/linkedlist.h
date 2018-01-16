@@ -128,8 +128,25 @@ class LinkedList
             head = tail = new_node;
         len++;
     }
-
-
+    // Accepts an argument of the same type as the elements in the list.
+    // The function returns true if the argument appears in the list;
+    // otherwise, the function returns false.
+    bool member(const T &item)
+    {
+        // Loop until we run off the end of the list or find n,
+        // whichever comes first
+        while (cursor && cursor->data != item)
+        {
+            prev = cursor;         // Remember previous node
+            cursor = cursor->next; // Move to next node
+        }
+        if (!cursor) // Did we run off the end of the list?
+            // We did not find the argument ins the list.
+            return false;
+        else
+            // The argument appears in the list.
+            return true;
+    }
 
     // Removes the first occurrence of item from the list.
     // Returns true if successful (found item and removed it).
