@@ -105,22 +105,16 @@ class LinkedList
             return false;
 
         auto cursor = head, tempCursor = temp.head, // Start at head of list
-            prev = head, tempPrev = temp.head;    // Keep track of previous node seen
-        // Loop until we run off the end of the list.
         while (cursor)
         {
-            // Remember previous node
-            prev = cursor; 
-            tempPrev = tempCursor;
             // Check the current values in both lists.
-            if (prev != tempPrev) {
-                return false; // Since they don't match
+            if (cursor->data != tempCursor->data) {
+                return false; // They don't match
             } 
             // Move to next node    
             cursor = cursor->next; 
             tempCursor = tempCursor->next;
         }
-
         return true; // The two lists contain the same elements in the same order
     }
 
@@ -181,7 +175,7 @@ class LinkedList
     // otherwise, the function returns false.
     bool member(const T &item)
     {
-        auto cursor = head, // Start at head of list
+        auto cursor = head; // Start at head of list
         while (cursor && cursor->data != item)
         {
             cursor = cursor->next; // Move to next node
