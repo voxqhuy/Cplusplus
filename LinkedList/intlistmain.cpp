@@ -10,7 +10,7 @@
      LinkedList<int> list;     // Instantiated for integers
  
      while (!done) {
-         std::cout << "I)nsert <item>  D)elete <item> P)rint  L)ength  E)rase Q)uit >>";
+         std::cout << "I)nsert <item>  A)ppend <item> D)elete <item> P)rint  L)ength  E)rase Q)uit >>";
          std::cin >> command;
          switch (command) {
            case 'I':   // Insert a new element into the list
@@ -20,7 +20,32 @@
              else
                  done = true;
              break;
-           case 'D':   // Insert a new element into the list
+
+           case 'A':   // Append an element onto the front of the list.
+           case 'a':
+             if (std::cin >> value)
+                 list.prepend(value);
+             else
+                 done = true;
+             break;
+
+           case 'B':   // Get an element at a position of the list.
+           case 'b':
+             if (std::cin >> value)
+                 std::cout << "The element at position " << value << " is " << list[value];
+             else
+                 done = true;
+             break;
+
+           case 'M':   //  Check if an element appears in the list
+           case 'm':
+             if (std::cin >> value)
+                 list.member(value);
+             else
+                 done = true;
+             break;
+
+           case 'D':   // Delete an element from the list
            case 'd':
              if (std::cin >> value)
                  if (list.remove(value))

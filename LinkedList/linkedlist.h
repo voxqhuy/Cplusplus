@@ -46,8 +46,11 @@ class LinkedList
 
     // The indexing operator allows a client to access an element
     // by its offset from the beginning of the list
-    std::shared_ptr<Node> operator[](int index)
+    T operator[](int index)
     {
+        // if (index > len - 1) {
+        //     return 
+        // }
         auto cursor = head, // Start at head of list
             prev = head;    // Keep track of previous node seen
         // Loop until the cursor goes to the element at position "index" in the list
@@ -58,7 +61,7 @@ class LinkedList
             cursor = cursor->next; // Move to next node
         }
         // Return the node for the element the client wants to access
-        return cursor;
+        return cursor->data;
     }
 
     // Assignment operator
@@ -101,21 +104,21 @@ class LinkedList
         if (len != temp.len) 
             return false;
 
-        auto cursor = head, temp.cursor = temp.head, // Start at head of list
+        auto cursor = head, tempCursor = temp.head, // Start at head of list
             prev = head, tempPrev = temp.head;    // Keep track of previous node seen
         // Loop until we run off the end of the list.
         while (cursor)
         {
             // Remember previous node
             prev = cursor; 
-            tempPrev = temp.cursor;
+            tempPrev = tempCursor;
             // Check the current values in both lists.
             if (prev != tempPrev) {
                 return false; // Since they don't match
             } 
             // Move to next node    
             cursor = cursor->next; 
-            temp.cursor = temp.cursor->next;
+            tempCursor = tempCursor->next;
         }
 
         return true; // The two lists contain the same elements in the same order
@@ -149,10 +152,24 @@ class LinkedList
     {
         // Make a node for the new element n
         auto new_node = std::make_shared<Node>(item);
-        if (head)
-        { // Is tail non-null?
-            head->next = head;
+        if (head) // Is head non-null?
+        {
+            // Make a node having data and next from the old head
+            auto copiedHead = std::make_shared<Node>(head->data);
+            copiedHead->next = head->next;
+            // append the new element n to the front of copiedHead
+            new_node->next = copiedHead;
+            // change the head to the new element n
             head = new_node;
+
+            // auto cursor = head, // Start at head of list
+            // prev = head;    // Keep track of previous node seen
+            // // Loop until we run off the end of the list.
+            // while (cursor && cursor->data != item)
+            // {
+            //     prev = cursor;         // Remember previous node
+            //     cursor = cursor->next; // Move to next node
+            // }
         }
         else // List is empty, so make head and tail point to new node
             head = tail = new_node;
@@ -165,16 +182,12 @@ class LinkedList
     bool member(const T &item)
     {
         auto cursor = head, // Start at head of list
-            prev = head;    // Keep track of previous node seen
-        // Loop until we run off the end of the list or find n,
-        // whichever comes first
         while (cursor && cursor->data != item)
         {
-            prev = cursor;         // Remember previous node
             cursor = cursor->next; // Move to next node
         }
         if (!cursor) // Did we run off the end of the list?
-            // We did not find the argument ins the list.
+            // We did not find the argument in the list.
             return false;
         else
             // The argument appears in the list.

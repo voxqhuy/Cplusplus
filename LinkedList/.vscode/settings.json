@@ -50,6 +50,8 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "tuple": "cpp",
-        "cwctype": "cpp"
+        "cwctype": "cpp",
+        "iomanip": "cpp",
+        "sstream": "cpp"
     }
 }
