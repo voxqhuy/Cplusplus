@@ -1,5 +1,12 @@
 // linkedlist.h
 
+/* 
+    Author: Vo Huy
+    Modified date: 1/18/18
+    Assignment #1 LinkedList
+    CPTR 318 Data Structures and Algorithms
+*/
+
 #include <iostream>
 #include <utility> // For std::swap
 #include <memory>  // For std::shared_ptr
@@ -46,7 +53,7 @@ class LinkedList
 
     // The indexing operator allows a client to access an element
     // by its offset from the beginning of the list
-    T operator[](int index)
+    T &operator[](int index)
     {
         // if (index > len - 1) {
         //     return 
@@ -95,7 +102,7 @@ class LinkedList
     }
 
     // Equality operator
-    bool &operator==(const LinkedList &other)
+    bool operator==(const LinkedList &other) const
     {
         // Make a local, temporary copy of other
         LinkedList temp{other};
@@ -104,7 +111,7 @@ class LinkedList
         if (len != temp.len) 
             return false;
 
-        auto cursor = head, tempCursor = temp.head, // Start at head of list
+        auto cursor = head, tempCursor = temp.head; // Start at head of list
         while (cursor)
         {
             // Check the current values in both lists.
@@ -221,32 +228,32 @@ class LinkedList
     }
 
     // Check the uniqueness of the elements
-    bool unique() {
+    bool unique() const 
+    {
         // If the list is empty or contain only one element, it will be unique.
         if (len < 2) 
             return true;
 
         auto cursor = head, // Start at head of list
-            cursorForTesting = head->next,
-            checkingElement = head,    // Keep track of previous node seen
-            testingElement = head->next; // Start comparing the previous with the next node
+            prev = head,    // Keep track of previous node seen
+            others = head; // The rest of the nodes in the list, excluding the "prev" node.
         // Loop until we run off the end of the list.
         while (cursor)
         {
-            checkingElement = cursor; // Remember previous node
+            prev = cursor; // Remember previous node
             cursor = cursor->next; // Move to next node
-            cursorForTesting = cursor->next;
+            others = cursor; // Start checking others at the element right after the "prev"
             // Loop until we run off the end of the list
             // starting from the "next" node after the checkingElement
-            while (cursorForTesting)
+            while (others)
             {
-                testingElement = cursorForTesting;         // Remember previous node
                 // Check if there is another element exist in the list
-                if (checkingElement == testingElement)
+                if (prev->data == others->data) 
                     return false; 
-                cursorForTesting = cursorForTesting->next; // Move to next node
+                others = others->next; // Move to next node
             }
         }
+        return true;
     }
 
     // Prints the contents of the linked list of integers.
