@@ -11,14 +11,29 @@
 // points.
 template <typename T>
 static void draw(Node<T> *t, char link, int depth) {
-    for (int i = 0; i < depth; i++) {
-        std::cout << ' ';
+    // Check if the node is null, end the function
+    if (t == nullptr) return;
+    // 
+
+    // Start drawing everything on the right recursively
+    draw (t->right, '/', depth + 1);
+    // Start drawing the root
+    // THE DRAWING PART
+    if (depth == 0) {
+        std::cout << "-[" << t->data << ']'; // Can this be improved????
+    } else {
+        for (int i = 0; i < depth; i++) {
+            std::cout << "   ";
+        }
+        if (link == '/') {
+            std::cout << "/[" << t->data << ']';
+        } else if (link == '\\') {
+            std::cout << "\\[" << t->data << ']';
+        }
     }
-    if (link == '/') {
-        std::cout << "/[" << t->data << ']';
-    } else if (link == '\\') {
-        std::cout << "/[" << t->data << ']';
-    }
+    std::cout << "\n";
+    // Start drawing everything on the right recursively
+    draw (t->left, '\\', depth + 1);
 }
 
 
@@ -26,9 +41,14 @@ static void draw(Node<T> *t, char link, int depth) {
 // rooted at t.
 template <typename T>
 void dispose(Node<T> *t) {
-    /**********************************
-     * Add your code here
-     **********************************/
+    // Check if the node is null, end the function
+    if (t == nullptr) return;
+    // Start deleting everything on the left and right recursively, the functions will end
+    // when they go out of the tree (or nullptr)
+    dispose (t->right);
+    dispose (t->left);
+    // Delete the node itself after the left and right dispose functions are done
+    free(t);
 }
 
 
@@ -52,5 +72,3 @@ static Node<T> *build_tree(typename std::vector<T>::const_iterator pre_begin,
      *************************************************/
     return nullptr;  
 }
-
-
