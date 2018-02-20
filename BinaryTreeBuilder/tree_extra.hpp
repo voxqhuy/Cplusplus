@@ -20,15 +20,15 @@ static void draw(Node<T> *t, char link, int depth) {
     // Start drawing the root
     // THE DRAWING PART
     if (depth == 0) {
-        std::cout << "-[" << t->data << ']'; // Can this be improved????
+        std::cout << "-[" << t->data << ']';                    // Can this be improved????
     } else {
         for (int i = 0; i < depth; i++) {
-            std::cout << "   ";
+            std::cout << "   ";     // Add some space for depth
         }
         if (link == '/') {
-            std::cout << "/[" << t->data << ']';
+            std::cout << "/[" << t->data << ']';    // right branch 
         } else if (link == '\\') {
-            std::cout << "\\[" << t->data << ']';
+            std::cout << "\\[" << t->data << ']';   // left branch
         }
     }
     std::cout << "\n";
@@ -67,8 +67,34 @@ static Node<T> *build_tree(typename std::vector<T>::const_iterator pre_begin,
                            typename std::vector<T>::const_iterator pre_end,
                            typename std::vector<T>::const_iterator in_begin, 
                            typename std::vector<T>::const_iterator in_end) {
-    /*************************************************
-     * Replace following statement with your code
-     *************************************************/
-    return nullptr;  
+    // Create a new tree (or node) for returning
+    // The root is the first element in the pre-ordered tree
+    Node<T> *new_tree = new Node<T>(*pre_begin, nullptr, nullptr);  // Unsure about this line of code. how to get the number to data
+    // If the sequence has only one element, end the function and return the node
+    if (pre_begin == pre_end) return new_tree;
+
+    // Making copies of iterators 
+    // Unsure about these, could be improved
+    //typename std::vector<T>::const_iterator new_pre_begin, new_pre_end, new_in_begin, new_in_end;
+    //new_pre_begin = pre_begin + 1;      // The sub pre-ordered tree starts at the first element after the root
+    //new_in_begin = in_begin;        // The sub in-ordered tree starts at the first element
+
+    typename std::vector<T>::const_iterator it;     // New iterator for looping
+    int passedElements = 0;     // Keep track of looped elements for making sub-trees
+    // Looping through in-odered tree until reaching the root element
+    for (it = in_begin; it != in_end; it++) {
+        if (*it == *pre_begin) break;        //Reached the root element, break the for loop
+        passedElements++;       //Number passed +1
+    }
+
+    //new_pre_end = new_pre_begin + passedElements;
+    //new_in_end = new_in_begin + passedElements;
+    
+    new_tree->left = build_tree(pre_begin + 1, pre_begin + passedElements,
+                                in_begin, in_begin + passedElements - 1);
+    new_tree->right = build_tree(pre_begin + 1 + passedElements, pre_end,
+                                 in_begin + passedElements + 1, in_end);
+
+    // Return the newly created binary tree
+    return new_tree;  
 }
