@@ -90,9 +90,9 @@ static Node<T> *build_tree(typename std::vector<T>::const_iterator pre_begin,
     //new_pre_end = new_pre_begin + passedElements;
     //new_in_end = new_in_begin + passedElements;
     
-    new_tree->left = build_tree(pre_begin + 1, pre_begin + passedElements,
+    new_tree->left = build_tree<T>(pre_begin + 1, pre_begin + passedElements,
                                 in_begin, in_begin + passedElements - 1);
-    new_tree->right = build_tree(pre_begin + 1 + passedElements, pre_end,
+    new_tree->right = build_tree<T>(pre_begin + 1 + passedElements, pre_end,
                                  in_begin + passedElements + 1, in_end);
 
     // Return the newly created binary tree
