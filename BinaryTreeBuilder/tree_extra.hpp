@@ -1,7 +1,7 @@
 //  Name: Vo Huy
 //  Binary Tree Build
 //  File name: tree_extra.cpp
-//  Date last modified: Deb 25, 2018
+//  Date last modified: Dec 19, 2018
 
 // Draws the binary tree rooted at t.  
 // Parameter link is a symbol to print in front of the node to
@@ -89,11 +89,20 @@ static Node<T> *build_tree(typename std::vector<T>::const_iterator pre_begin,
 
     //new_pre_end = new_pre_begin + passedElements;
     //new_in_end = new_in_begin + passedElements;
-    
+    // Can iterator go beyond the range? before it_begin or after it_end?
+    //if (passedElements == 0) {
+    //    new_tree->left = nullptr;
+    //} else {
     new_tree->left = build_tree<T>(pre_begin + 1, pre_begin + passedElements,
                                 in_begin, in_begin + passedElements - 1);
+    //}
+
+    //if ((pre_begin + passedElements == pre_end) || (in_begin + passedElements == in_end)) {
+    //    new_tree->right = nullptr;
+    //} else {
     new_tree->right = build_tree<T>(pre_begin + 1 + passedElements, pre_end,
                                  in_begin + passedElements + 1, in_end);
+    //}
 
     // Return the newly created binary tree
     return new_tree;  
