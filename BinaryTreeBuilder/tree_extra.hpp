@@ -1,4 +1,7 @@
-//  tree_extra.hpp
+//  Name: Vo Huy
+//  Binary Tree Build
+//  File name: tree_extra.cpp
+//  Date last modified: Deb 25, 2018
 
 // Draws the binary tree rooted at t.  
 // Parameter link is a symbol to print in front of the node to
@@ -8,10 +11,14 @@
 // points.
 template <typename T>
 static void draw(Node<T> *t, char link, int depth) {
-    /*************************************************
-     * Replace following statement with your code
-     *************************************************/
-    std::cout << "TODO: Implement draw function\n";
+    for (int i = 0; i < depth; i++) {
+        std::cout << ' ';
+    }
+    if (link == '/') {
+        std::cout << "/[" << t->data << ']';
+    } else if (link == '\\') {
+        std::cout << "/[" << t->data << ']';
+    }
 }
 
 

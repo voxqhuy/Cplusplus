@@ -21,4 +21,14 @@ int main() {
 
     Node<std::string> *str_tree = build_tree<std::string>(ps, is);
     draw(str_tree);
+
+     Node<int> *sample_tree = new Node<int>(14, 
+                                       new Node<int>(11,
+                                            new Node<int>(12, nullptr, nullptr),
+                                            new Node<int>(5, nullptr, nullptr)),
+                                       new Node<int>(6, 
+                                            nullptr, 
+                                            new Node<int>(5, nullptr, nullptr)));
+
+    draw(sample_tree);
 }
