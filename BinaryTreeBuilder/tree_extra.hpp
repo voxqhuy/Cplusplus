@@ -1,7 +1,9 @@
 //  Name: Vo Huy
-//  Binary Tree Build
-//  File name: tree_extra.cpp
+//  Assignment number: 3
+//  Assignment: Building a Binary Tree from Traversals
+//  File name: tree_extra.hpp
 //  Date last modified: Feb 22, 2018
+//  Honor statement: I have neither given nor received any unauthorized help on this assignment. 
 
 // Draws the binary tree rooted at t.  
 // Parameter link is a symbol to print in front of the node to
@@ -18,19 +20,10 @@ static void draw(Node<T> *t, char link, int depth) {
     draw (t->right, '/', depth + 1);
     // Start drawing the root
     // THE DRAWING PART
-    if (depth == 0) {
-        std::cout << "-[" << t->data << ']';                 
-    } else {
-        for (int i = 0; i < depth; i++) {
-            std::cout << "   ";     // Add some space for depth
-        }
-        if (link == '/') {
-            std::cout << "/[" << t->data << ']';    // right branch 
-        } else if (link == '\\') {
-            std::cout << "\\[" << t->data << ']';   // left branch
-        }
+    for (int i = 0; i < depth; i++) {
+        std::cout << "   ";     // Add some space for depth
     }
-    std::cout << "\n";
+    std::cout << link << "[" << t->data << ']' << "\n"; // drawing the node
     // Start drawing everything on the right recursively
     draw (t->left, '\\', depth + 1);
 }

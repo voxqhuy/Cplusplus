@@ -34,4 +34,3 @@ Node<T> *build_tree(const std::vector<T>& preorder,
     return build_tree<T>(begin(preorder), end(preorder),
                          begin(inorder), end(inorder));
 }
-
