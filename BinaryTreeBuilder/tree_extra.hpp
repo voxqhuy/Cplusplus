@@ -2,7 +2,7 @@
 //  Assignment number: 3
 //  Assignment: Building a Binary Tree from Traversals
 //  File name: tree_extra.hpp
-//  Date last modified: Feb 22, 2018
+//  Date last modified: Feb 26, 2018
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment. 
 
 // Draws the binary tree rooted at t.  
@@ -65,10 +65,10 @@ static Node<T> *build_tree(typename std::vector<T>::const_iterator pre_begin,
     // The root is the first element in the pre-ordered tree
     Node<T> *new_tree = new Node<T>(*pre_begin, nullptr, nullptr);  
 
-    typename std::vector<T>::const_iterator it;     // New iterator for looping
+        // New iterator for looping
     int passedElements = 0;     // Keep track of looped elements for making sub-trees
     // Looping through in-odered tree until reaching the root element
-    for (it = in_begin; it != in_end; it++) {
+    for (auto it = in_begin; it != in_end; it++) {
         if (*it == *pre_begin) break;        //Reached the root element, break the for loop
         passedElements++;       //Number passed +1
     }
