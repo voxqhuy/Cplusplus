@@ -3,14 +3,19 @@
 using namespace std;
 
 void printFrequency(int* freq) {
-
+    int total = 0;
+    for(int i = 'A'; i <= 'Z'; i++) {
+        std::cout << static_cast<char>(i) << ": " << freq[i] << "\n";
+        total += freq[i];
+    }
+    cout << "Total = " << total << "\n";
 }
 
 int main() {
     // each letter
     char letter;
     // An array to keep the frequencies
-    int freq[90] = { }; // initialize all frequencies to 0
+    int freq[91] = { }; // initialize all frequencies to 0
 
     // Using the text file as input
     ifstream inFile;
@@ -30,7 +35,9 @@ int main() {
     std::cout << "\n" << "Counts:" << "\n" << "-------" << "\n";
     // print out the frequencies
     printFrequency(freq);
-
+    std::cout << "---------------------------------" << "\n";
+    // build Huffman tree
+    buildHuffmanTree(freq);
     inFile.close();
 }
 
