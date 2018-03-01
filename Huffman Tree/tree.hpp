@@ -1,23 +1,66 @@
-//  tree.hpp
+//  Huffman.hpp
 
-// Represents a node in a binary tree.
-// template <typename T>
-// struct Node {
-// 	T data;
-// 	Node *left;
-// 	Node *right;
-// 	Node(const T& d, Node *lf, Node *rt) :
-// 		data(d), left(lf), right(rt) {}
-// };
+/**  	Huffman Node's visualization: 
+ ** 
+ **          (Huffman Node)
+ **				 ^	  ^
+ **				/      \
+ **			   /		\
+ **		(Char Node)	 (Interior Node)	
+ **/
 
-// Huffman Node 
+
+// Huffman Node class
 class HuffmanNode {
 	// Frequency as data
 	double frequency;
-	public:
-		// member function print code: print Huffman encoded codes
-		virtual void
+public:
+	// Constructor
+	HuffmanNode(double freq): frequency(freq) {}
+	// member function print code: print Huffman encoded codes
+	// const = 0: this is a pure method, it's not supposed to change the data of the class (const)
+	//https://stackoverflow.com/a/21187983/8969722
+	virtual void printCodes(string bitString) const = 0;
+	// print nothing if no parameters passed in
+	virtual void printCodes() { printCodes(""); }
+	// frequency getter
+	double getFrequency() const { return frequency; }
+};
+
+// CharNode is a subclass of HuffmanNode (extends) for characters ('A' - 'Z')
+class CharNode : public HuffmanNode {
+	// character as data
+	char character;
+public:
+	// Constructor
+	CharNode(char ch, double freq): HuffmanNode(freq), character(ch) { }
+	// member function printCodes: print characters ('A' - 'Z')
+	// const override: a virtual function overrides another virtual function
+	// http://en.cppreference.com/w/cpp/language/override
+	void printCodes (string bitString) const override { 
+		cout << character << " : " << bitString << endl;		// Ex: "A : "
+	}
 }
+
+// InteriorNode is a subclass of HuffmanNode (extends)
+class InteriorNode : public HuffmanNode {
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Draws the binary tree rooted at t.  Invokes the serves of the 
