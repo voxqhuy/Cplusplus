@@ -1,6 +1,8 @@
 #include <fstream>
 #include <iostream>
+#include "tree.hpp"
 using namespace std;
+
 
 void printFrequency(int* freq) {
     int total = 0;
