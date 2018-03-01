@@ -1,4 +1,4 @@
-//  Huffman.hpp
+//  huffmanTree.hpp
 
 /**  	Huffman Node's visualization: 
  ** 
@@ -37,14 +37,26 @@ public:
 	// member function printCodes: print characters ('A' - 'Z')
 	// const override: a virtual function overrides another virtual function
 	// http://en.cppreference.com/w/cpp/language/override
-	void printCodes (string bitString) const override { 
+	void printCodes (string bitString) const override {			// overrides parent printCodes function
 		cout << character << " : " << bitString << endl;		// Ex: "A : "
 	}
 }
 
-// InteriorNode is a subclass of HuffmanNode (extends)
+// InteriorNode is a subclass of HuffmanNode (extends). The most basic node in Huffman tree
 class InteriorNode : public HuffmanNode {
-
+	HuffmanNode *left;		// left subtree pointer
+	HuffmanNode *right;		// right subtree pointer
+public:
+	// Constructor
+	InteriorNode(double freq, HuffmanNode *lf, HuffmanNode *rt) :
+		HuffmanNode (freq), left(lf), right(rt) { }
+	// member function
+	void printCodes(string bitString) const override {			// overrides parent printCodes function
+		if (left != nullptr) 
+			left->printCodes(bitString + '0');					// encode 0 for the lefts
+		if (right != nullptr)
+			right->printCodes(bitString + '1');
+	}
 }
 
 
