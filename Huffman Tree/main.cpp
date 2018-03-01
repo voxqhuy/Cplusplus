@@ -7,17 +7,21 @@ using namespace std;
 void printFrequency(int* freq) {
     int total = 0;
     for(int i = 'A'; i <= 'Z'; i++) {
-        std::cout << static_cast<char>(i) << ": " << freq[i] << "\n";
-        total += freq[i];
+        std::cout << static_cast<char>(i) << ": " << freq[i-65] << "\n";
+        total += freq[i-65];
     }
     cout << "Total = " << total << "\n";
+}
+
+void buildHuffmanTree(int* freq) {
+
 }
 
 int main() {
     // each letter
     char letter;
     // An array to keep the frequencies
-    int freq[91] = { }; // initialize all frequencies to 0
+    int freq[26] = { }; // initialize all frequencies to 0
 
     // Using the text file as input
     ifstream inFile;
@@ -31,7 +35,7 @@ int main() {
     inFile >> noskipws;     // including the whitespace
     while (inFile >> letter) {
         std::cout << letter;        // printing out the texts
-        freq[std::toupper(letter)]++;       // adding 1 to the frequency of the letter (capitialized)
+        freq[std::toupper(letter) - 65]++;       // adding 1 to the frequency of the letter (capitialized)
     }
 
     std::cout << "\n" << "Counts:" << "\n" << "-------" << "\n";

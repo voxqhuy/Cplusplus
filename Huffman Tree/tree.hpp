@@ -1,18 +1,24 @@
 //  tree.hpp
 
-#include <vector>
-
 // Represents a node in a binary tree.
-template <typename T>
-struct Node {
-	T data;
-	Node *left;
-	Node *right;
-	Node(const T& d, Node *lf, Node *rt) :
-		data(d), left(lf), right(rt) {}
-};
+// template <typename T>
+// struct Node {
+// 	T data;
+// 	Node *left;
+// 	Node *right;
+// 	Node(const T& d, Node *lf, Node *rt) :
+// 		data(d), left(lf), right(rt) {}
+// };
 
-#include "tree_extra.hpp"
+// Huffman Node 
+class HuffmanNode {
+	// Frequency as data
+	double frequency;
+	public:
+		// member function print code: print Huffman encoded codes
+		virtual void
+}
+
 
 // Draws the binary tree rooted at t.  Invokes the serves of the 
 // overloaded version to do the real work.
