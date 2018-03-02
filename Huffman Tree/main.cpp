@@ -1,8 +1,78 @@
 #include <fstream>
 #include <iostream>
-#include "tree.hpp"
+#include <string>
+#include <queue>          // std::priority_queue
+#include <vector>         // std::vector
 using namespace std;
 
+/** THE CLASS PART **/
+
+/**  	Huffman Node's visualization: 
+ ** 
+ **          (Huffman Node)
+ **				 ^	  ^
+ **				/      \
+ **			   /		\
+ **		(Char Node)	 (Interior Node)	
+ **/
+
+// Huffman Node class
+class HuffmanNode {
+	// Frequency as data
+	double frequency;
+public:
+	// Constructor
+	HuffmanNode(double freq): frequency(freq) {}
+	// member function print code: print Huffman encoded codes
+	// const = 0: this is a pure method, it's not supposed to change the data of the class (const)
+	//https://stackoverflow.com/a/21187983/8969722
+	virtual void printCodes(std::string bitString) const = 0;
+	// print nothing if no parameters passed in
+	virtual void printCodes() { printCodes(""); }
+	// frequency getter
+	double getFrequency() const { return frequency; }
+};
+
+// CharNode is a subclass of HuffmanNode (extends) for characters ('A' - 'Z')
+class CharNode : public HuffmanNode {
+	// character as data
+	char character;
+public:
+	// Constructor
+	CharNode(char ch, double freq): HuffmanNode(freq), character(ch) { }
+	// member function printCodes: print characters ('A' - 'Z')
+	// const override: a virtual function overrides another virtual function
+	// http://en.cppreference.com/w/cpp/language/override
+	void printCodes (std::string bitString) const override {			// overrides parent printCodes function
+		cout << character << " : " << bitString << endl;		// Ex: "A : "
+	}
+};
+
+// InteriorNode is a subclass of HuffmanNode (extends). The most basic node in Huffman tree
+class InteriorNode : public HuffmanNode {
+	HuffmanNode *left;		// left subtree pointer
+	HuffmanNode *right;		// right subtree pointer
+public:
+	// Constructor
+	InteriorNode(double freq, HuffmanNode *lf, HuffmanNode *rt) :
+		HuffmanNode (freq), left(lf), right(rt) { }
+	// member function
+	void printCodes(std::string bitString) const override {			// overrides parent printCodes function
+		if (left != nullptr) 
+			left->printCodes(bitString + '0');					// encode 0 for the lefts
+		if (right != nullptr)
+			right->printCodes(bitString + '1');
+	}
+};
+
+// Draws the binary tree rooted at t.  Invokes the serves of the 
+// overloaded version to do the real work.
+// template <typename T>
+// void draw(Node<T> *t) {
+// 	draw(t, '-', 0);
+// }
+
+/** THE FUNCTIONS PART **/
 
 void printFrequency(int* freq) {
     int total = 0;
@@ -13,8 +83,31 @@ void printFrequency(int* freq) {
     cout << "Total = " << total << "\n";
 }
 
-void buildHuffmanTree(int* freq) {
+// HuffmanNode *huffman(const vector<pair<char, double>>& symbols) {
+//     // Make an empty priority queue
+//     priority_queue<Huffman *>
+// }
 
+HuffmanNode *huffman(const vector<pair<char, double>>& symbols) {
+    // Make an empty priority queue
+    priority_queue<HuffmanNode *> queue;
+    // Make a forest of single-node trees and place them in the priority queue
+    for (auto p : symbols)
+        queue.push(new CharNode(p.first, p.second));
+    // Merge trees until only one tree remains in the priority queue
+    while (queue.size() > 1) {
+        //Extract the two trees with the minimal frequencies
+        HuffmanNode *n1 = queue.top();
+        queue.pop();
+        HuffmanNode *n2 = queue.top();
+        queue.pop();
+        // Combine them into a new tree with a common parent,
+        // and put this new tree back into the priority queue
+        queue.push(
+            new InteriorNode(n1->getFrequency() + n2->getFrequency(), n1, n2)
+        );
+    }
+    return queue;
 }
 
 int main() {
