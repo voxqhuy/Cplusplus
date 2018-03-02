@@ -95,19 +95,21 @@ HuffmanNode *huffman(const vector<pair<char, double>>& symbols) {
     for (auto p : symbols)
         queue.push(new CharNode(p.first, p.second));
     // Merge trees until only one tree remains in the priority queue
+    // root is the last node after merging (the root)
+    HuffmanNode *root = NULL;
+    // Start looping (merging)
     while (queue.size() > 1) {
         //Extract the two trees with the minimal frequencies
         HuffmanNode *n1 = queue.top();
         queue.pop();
         HuffmanNode *n2 = queue.top();
         queue.pop();
+        root = new InteriorNode(n1->getFrequency() + n2->getFrequency(), n1, n2);
         // Combine them into a new tree with a common parent,
         // and put this new tree back into the priority queue
-        queue.push(
-            new InteriorNode(n1->getFrequency() + n2->getFrequency(), n1, n2)
-        );
+        queue.push(root);
     }
-    return queue;
+    return root;
 }
 
 int main() {
@@ -136,7 +138,7 @@ int main() {
     printFrequency(freq);
     std::cout << "---------------------------------" << "\n";
     // build Huffman tree
-    buildHuffmanTree(freq);
+    // buildHuffmanTree(freq);
     inFile.close();
 }
 
