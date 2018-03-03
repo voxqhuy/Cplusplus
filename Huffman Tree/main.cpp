@@ -3,6 +3,7 @@
 #include <string>
 #include <queue>          // std::priority_queue
 #include <vector>         // std::vector
+#include <math.h>       /* round, floor, ceil, trunc */
 using namespace std;
 
 /*********** THE CLASS PART ***********/
@@ -56,7 +57,7 @@ class InteriorNode : public HuffmanNode {
 public:
 	// Constructor
 	InteriorNode(double freq, HuffmanNode *lf, HuffmanNode *rt) :
-		HuffmanNode (freq), left(lf), right(rt) { }
+		HuffmanNode(freq), left(lf), right(rt) { }
 	// member function
 	void printCodes(std::string bitString) const override {			// overrides parent printCodes function
 		if (left != nullptr) 
@@ -84,8 +85,8 @@ vector<pair<char, double>> printFrequency(int* freq, int total) {
     for(int i = 'A'; i <= 'Z'; i++) {
         char ch =  static_cast<char>(i);        // the character
         int frequency = freq[i-'A'];            // the frequency of the character
-        // keep adding each character with its % frequency (total / its frequency)
-        symbols.push_back(make_pair(ch, 1.0 * total / frequency));
+        // keep adding each character with its % frequency (its frequency / total)
+        symbols.push_back(std::make_pair(ch, round(1000000.0 * frequency / total) / 1000000.0)); // rounded to 6 numbers after the decimal point
 
         std::cout << ch << ": " << frequency << '\n';
     }
@@ -107,7 +108,7 @@ HuffmanNode *build_huffman(const vector<pair<char, double>>& symbols) {
         queue.push(new CharNode(p.first, p.second));
     // Merge trees until only one tree remains in the priority queue
     // root is the last node after merging (the root)
-    HuffmanNode *root = NULL;
+    InteriorNode *root = NULL;
     // Start looping (merging)
     while (queue.size() > 1) {
         //Extract the two trees with the minimal frequencies
@@ -148,7 +149,7 @@ int main() {
     std::cout << '\n' << "Counts:" << '\n' << "-------" << '\n';
     // make a vector pair with format "char: frequency" (Ex: A: 0.003)
     // print out the frequencies
-    printFrequency(freq, total);
+    HuffmanNode *root = build_huffman(printFrequency(freq, total));
     std::cout << "---------------------------------" << '\n';
     // build Huffman tree
     // buildHuffmanTree(freq);
