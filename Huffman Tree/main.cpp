@@ -67,6 +67,17 @@ public:
 	}
 };
 
+// Customed strict weak ordering for the priority queue
+// https://stackoverflow.com/a/19535699/8969722
+class CompareFreq
+{
+public:
+    bool operator()(HuffmanNode const * node1, HuffmanNode const * node2) {
+        // return "true" if "node2" freq is ordered before "node1" freq
+        return node1->getFrequency() > node2->getFrequency();   // smallest frequency stay on top => first out
+    }
+};
+
 /*********** END OF THE CLASS PART ***********/
 
 // Draws the binary tree rooted at t.  Invokes the serves of the 
@@ -102,7 +113,7 @@ vector<pair<char, double>> printFrequency(int* freq, int total) {
 
 HuffmanNode *build_huffman(const vector<pair<char, double>>& symbols) {
     // Make an empty priority queue
-    priority_queue<HuffmanNode *> queue;
+    priority_queue<HuffmanNode*, vector<HuffmanNode*>, CompareFreq> queue;
     // Make a forest of single-node trees and place them in the priority queue
     for (auto p : symbols)
         queue.push(new CharNode(p.first, p.second));
