@@ -5,8 +5,9 @@
 #include <vector>         // std::vector
 using namespace std;
 
-/** THE CLASS PART **/
+/*********** THE CLASS PART ***********/
 
+// These classes are based on class 318 lecture at SAU by Dr. Halterman
 /**  	Huffman Node's visualization: 
  ** 
  **          (Huffman Node)
@@ -44,14 +45,14 @@ public:
 	// const override: a virtual function overrides another virtual function
 	// http://en.cppreference.com/w/cpp/language/override
 	void printCodes (std::string bitString) const override {			// overrides parent printCodes function
-		cout << character << " : " << bitString << endl;		// Ex: "A : "
+		cout << character << " : " << bitString << '\n';		// Ex: "A : "
 	}
 };
 
 // InteriorNode is a subclass of HuffmanNode (extends). The most basic node in Huffman tree
 class InteriorNode : public HuffmanNode {
-	HuffmanNode *left;		// left subtree pointer
-	HuffmanNode *right;		// right subtree pointer
+	HuffmanNode *left;		    // left subtree pointer
+	HuffmanNode *right;		    // right subtree pointer
 public:
 	// Constructor
 	InteriorNode(double freq, HuffmanNode *lf, HuffmanNode *rt) :
@@ -65,6 +66,8 @@ public:
 	}
 };
 
+/*********** END OF THE CLASS PART ***********/
+
 // Draws the binary tree rooted at t.  Invokes the serves of the 
 // overloaded version to do the real work.
 // template <typename T>
@@ -72,15 +75,23 @@ public:
 // 	draw(t, '-', 0);
 // }
 
-/** THE FUNCTIONS PART **/
+/*********** THE FUNCTIONS PART ***********/
 
-void printFrequency(int* freq) {
-    int total = 0;
+vector<pair<char, double>> printFrequency(int* freq, int total) {
+    // the vector that keeps characters with their frequencies
+    vector<pair<char, double>> symbols;
+    // Loop through the freq array (keeping frequencies of 26 elements)
     for(int i = 'A'; i <= 'Z'; i++) {
-        std::cout << static_cast<char>(i) << ": " << freq[i-65] << "\n";
-        total += freq[i-65];
+        char ch =  static_cast<char>(i);        // the character
+        int frequency = freq[i-'A'];            // the frequency of the character
+        // keep adding each character with its % frequency (total / its frequency)
+        symbols.push_back(make_pair(ch, 1.0 * total / frequency));
+
+        std::cout << ch << ": " << frequency << '\n';
     }
-    cout << "Total = " << total << "\n";
+    std::cout << "Total = " << total << '\n';        // print the total
+
+    return symbols;
 }
 
 // HuffmanNode *huffman(const vector<pair<char, double>>& symbols) {
@@ -88,7 +99,7 @@ void printFrequency(int* freq) {
 //     priority_queue<Huffman *>
 // }
 
-HuffmanNode *huffman(const vector<pair<char, double>>& symbols) {
+HuffmanNode *build_huffman(const vector<pair<char, double>>& symbols) {
     // Make an empty priority queue
     priority_queue<HuffmanNode *> queue;
     // Make a forest of single-node trees and place them in the priority queue
@@ -113,10 +124,10 @@ HuffmanNode *huffman(const vector<pair<char, double>>& symbols) {
 }
 
 int main() {
-    // each letter
-    char letter;
+    char ch;                    // each letter
+    int total;                  // the total number of letters
     // An array to keep the frequencies
-    int freq[26] = { }; // initialize all frequencies to 0
+    int freq[26] = { };         // initialize all frequencies to 0
 
     // Using the text file as input
     ifstream inFile;
@@ -124,21 +135,22 @@ int main() {
     // Check if the text file could be opened
     if (!inFile) {
         std::cout  << "Unable to open file declaration.text";
-        exit(1);        // Unable to open the file, exit the function
+        exit(1);                // Unable to open the file, exit the function
     }
     // Reading the text
-    inFile >> noskipws;     // including the whitespace
-    while (inFile >> letter) {
-        std::cout << letter;        // printing out the texts
-        freq[std::toupper(letter) - 65]++;       // adding 1 to the frequency of the letter (capitialized)
+    inFile >> noskipws;         // including the whitespace
+    while (inFile >> ch) {
+        std::cout << ch;        // printing out the texts
+        freq[std::toupper(ch) - 'A']++;         // adding 1 to the frequency of the letter (capitialized)
+        if (isalpha(std::toupper(ch))) total++;                 // increase the number of letter
     }
 
-    std::cout << "\n" << "Counts:" << "\n" << "-------" << "\n";
+    std::cout << '\n' << "Counts:" << '\n' << "-------" << '\n';
+    // make a vector pair with format "char: frequency" (Ex: A: 0.003)
     // print out the frequencies
-    printFrequency(freq);
-    std::cout << "---------------------------------" << "\n";
+    printFrequency(freq, total);
+    std::cout << "---------------------------------" << '\n';
     // build Huffman tree
     // buildHuffmanTree(freq);
     inFile.close();
 }
-
