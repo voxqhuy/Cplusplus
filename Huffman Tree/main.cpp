@@ -4,6 +4,7 @@
 #include <queue>          // std::priority_queue
 #include <vector>         // std::vector
 #include <math.h>       /* round, floor, ceil, trunc */
+#include <iomanip>      // std::setprecision
 using namespace std;
 
 /*********** THE CLASS PART ***********/
@@ -24,15 +25,24 @@ class HuffmanNode {
 	double frequency;
 public:
 	// Constructor
-	HuffmanNode(double freq): frequency(freq) {}
+	HuffmanNode (double freq): frequency(freq) {}
 	// member function print code: print Huffman encoded codes
 	// const = 0: this is a pure method, it's not supposed to change the data of the class (const)
 	//https://stackoverflow.com/a/21187983/8969722
-	virtual void printCodes(std::string bitString) const = 0;
-	// print nothing if no parameters passed in
-	virtual void printCodes() { printCodes(""); }
+    // virtual function:  To implement polymorphism
+    // if the superclass pointer is aiming at a subclass objects, and invoke a virtual function
+    // that is overridden by the subclass, the subclass version will be invoked, instead of the superclass version
+	virtual void printCodes (std::string bitString) const = 0;
+	// Start printing the bitString (blank at first).
+    // Invokes the serves of the overloaded version to do the real work.
+	virtual void printCodes () { printCodes(""); }
+    // virtual functon for drawing the huffman tree
+    virtual void drawNode (char link, int depth) const = 0;  // pure function to be overridden
+    // Draws the huffman tree rooted at t.  Invokes the serves of the 
+    // overloaded version to do the real work.
+    virtual void drawNode () { drawNode('-', 0); }
 	// frequency getter
-	double getFrequency() const { return frequency; }
+	double getFrequency () const { return frequency; }
 };
 
 // CharNode is a subclass of HuffmanNode (extends) for characters ('A' - 'Z')
@@ -41,13 +51,22 @@ class CharNode : public HuffmanNode {
 	char character;
 public:
 	// Constructor
-	CharNode(char ch, double freq): HuffmanNode(freq), character(ch) { }
+	CharNode (char ch, double freq): HuffmanNode(freq), character(ch) { }
 	// member function printCodes: print characters ('A' - 'Z')
 	// const override: a virtual function overrides another virtual function
 	// http://en.cppreference.com/w/cpp/language/override
-	void printCodes (std::string bitString) const override {			// overrides parent printCodes function
+	void printCodes (std::string bitString) const override {	// overrides parent printCodes function
 		cout << character << " : " << bitString << '\n';		// Ex: "A : "
 	}
+    // overrides the drawNode from superclass HuffmanNode to draw the leaves Ex: "/ [O:0.078509]"
+    void drawNode (char link, int depth) {
+        // Start drawing the node
+        for (int i = 0; i < depth; i++) {
+            std::cout << "   ";     // Add some space for depth
+        }
+        std::cout << link << " [" << character << ':' << std::setprecision(6) // rounded to 6 digits after decimal point
+            << HuffmanNode::getFrequency() << ']' << '\n';      // drawing the node
+    }
 };
 
 // InteriorNode is a subclass of HuffmanNode (extends). The most basic node in Huffman tree
@@ -56,15 +75,27 @@ class InteriorNode : public HuffmanNode {
 	HuffmanNode *right;		    // right subtree pointer
 public:
 	// Constructor
-	InteriorNode(double freq, HuffmanNode *lf, HuffmanNode *rt) :
+	InteriorNode (double freq, HuffmanNode *lf, HuffmanNode *rt) :
 		HuffmanNode(freq), left(lf), right(rt) { }
 	// member function
-	void printCodes(std::string bitString) const override {			// overrides parent printCodes function
+	void printCodes (std::string bitString) const override {	// overrides parent printCodes function
 		if (left != nullptr) 
 			left->printCodes(bitString + '0');					// encode 0 for the lefts
 		if (right != nullptr)
-			right->printCodes(bitString + '1');
+			right->printCodes(bitString + '1');                 // encode 1 for the rights
 	}
+    // overrides the drawNode from superclass HuffmanNode to draw the non-leaves Ex: "/ (0.152436)"
+    void drawNode (char link, int depth) const override {
+        // Start drawing everything on the right recursively
+        right->drawNode ('/', depth + 1);
+        // Start drawing the node
+        for (int i = 0; i < depth; i++) {
+            std::cout << "   ";     // Add some space for depth
+        }
+        std::cout << link << " (" << std::setprecision(6) << HuffmanNode::getFrequency() << ')' << '\n';
+        // Start drawing everything on the right recursively
+        left->drawNode ('\\', depth + 1);
+    }
 };
 
 // Customed strict weak ordering for the priority queue
@@ -80,12 +111,36 @@ public:
 
 /*********** END OF THE CLASS PART ***********/
 
-// Draws the binary tree rooted at t.  Invokes the serves of the 
-// overloaded version to do the real work.
-// template <typename T>
-// void draw(Node<T> *t) {
-// 	draw(t, '-', 0);
+// /*********** START OF THE DRAWING PART ***********/
+
+// // Draws the huffman tree rooted at t.  Invokes the serves of the 
+// // overloaded version to do the real work.
+// void draw(HuffmanNode *node) {
+// 	draw(node, '-', 0);
 // }
+
+// // Draws the rest of huffman tree rooted at t.  
+// // "link" is a symbol to print in front of the node to which t points
+// // indicating the direction of the branch leading to the node.
+// // "depth" is proportional to depth of the node to which p points.
+// template <typename T>
+// static void draw(HuffmanNode *node, char link, int depth) {
+//     // Check if the node is null, end the function
+//     if (node == nullptr) return;
+
+//     // Start drawing everything on the right recursively
+//     draw (node->right, '/', depth + 1);
+//     // Start drawing the root
+//     // THE DRAWING PART
+//     for (int i = 0; i < depth; i++) {
+//         std::cout << "   ";     // Add some space for depth
+//     }
+//     std::cout << link << " [" << t->data << ']' << "\n"; // drawing the node
+//     // Start drawing everything on the right recursively
+//     draw (t->left, '\\', depth + 1);
+// }
+
+/*********** END OF THE DRAWING PART ***********/
 
 /*********** THE FUNCTIONS PART ***********/
 
@@ -119,7 +174,7 @@ HuffmanNode *build_huffman(const vector<pair<char, double>>& symbols) {
         queue.push(new CharNode(p.first, p.second));
     // Merge trees until only one tree remains in the priority queue
     // root is the last node after merging (the root)
-    InteriorNode *root = NULL;
+    HuffmanNode *root = NULL;
     // Start looping (merging)
     while (queue.size() > 1) {
         //Extract the two trees with the minimal frequencies
@@ -163,6 +218,6 @@ int main() {
     HuffmanNode *root = build_huffman(printFrequency(freq, total));
     std::cout << "---------------------------------" << '\n';
     // build Huffman tree
-    // buildHuffmanTree(freq);
+    root->drawNode();
     inFile.close();
 }
