@@ -1,3 +1,32 @@
+/* NOTICES 
+    1. These classes are based on class 318 lecture at SAU by Dr. Halterman
+
+    2.virtual function:  To implement polymorphism 
+    If the superclass pointer is aiming at a subclass objects, and invoke a virtual function
+    that is overridden by the subclass, the subclass version will be invoked, instead of the superclass version
+    https://www.ntu.edu.sg/home/ehchua/programming/cpp/cp6_Inheritance.html
+    
+    3.Customed strict weak ordering
+    https://stackoverflow.com/a/19535699/8969722
+
+    4."= 0" : this is a pure method https://stackoverflow.com/a/21187983/8969722
+
+    5. override: a virtual function overrides another virtual function
+	http://en.cppreference.com/w/cpp/language/override
+*/
+
+/*********** THE CLASS PART ***********/
+
+/*   
+   Huffman Node's visualization: 
+ 
+          (Huffman Node)
+			 ^	  ^
+			/      \
+		   /		\
+	(Char Node)	 (Interior Node)	
+*/
+
 #include <fstream>
 #include <iostream>     // std::cout, std::fixed
 #include <string>
@@ -7,58 +36,69 @@
 #include <iomanip>      // std::setprecision
 using namespace std;
 
-/*********** THE CLASS PART ***********/
-
-// These classes are based on class 318 lecture at SAU by Dr. Halterman
-/**  	Huffman Node's visualization: 
- ** 
- **          (Huffman Node)
- **				 ^	  ^
- **				/      \
- **			   /		\
- **		(Char Node)	 (Interior Node)	
- **/
+// A class that contains a Compare (for sorting A to Z) for all Nodes subclasses
+class AZNode 
+{
+public:
+    // Ordering A to Z
+    class CompareAlphabets
+    {
+    public:
+        bool operator()(pair<char, string> code1, pair<char, string> code2) {
+            // return A is ordered after Z
+            return code1.first > code2.first; 
+        }
+    };
+};
 
 // Huffman Node class
-class HuffmanNode {
+class HuffmanNode : public AZNode {
 private:
-	// Frequency as data
-	double frequency;
+	double frequency;       // Frequency as data
 public:
 	// Constructor
 	HuffmanNode (double freq): frequency(freq) {}
-	// member function print code: print Huffman encoded codes
-	// const = 0: this is a pure method, it's not supposed to change the data of the class (const)
-	//https://stackoverflow.com/a/21187983/8969722
-    // virtual function:  To implement polymorphism
-    // if the superclass pointer is aiming at a subclass objects, and invoke a virtual function
-    // that is overridden by the subclass, the subclass version will be invoked, instead of the superclass version
-	virtual void printCodes (string bitString) const = 0;
-	// Start printing the bitString (blank at first).
-    // Invokes the serves of the overloaded version to do the real work.
-	virtual void printCodes () { printCodes(""); }
-    // virtual functon for drawing the huffman tree
-    virtual void drawNode (char link, int depth) const = 0;  // pure function to be overridden
+	// member function encode: Huffman encoding (and attach each code to each character)
+	virtual void encode (string bitString,
+        priority_queue<pair<char, string>, vector<pair<char, string>>, 
+        AZNode::CompareAlphabets>& codes) = 0;      
+	// Start encoding, start with blank
+	virtual void encode (priority_queue<pair<char, string>, 
+        vector<pair<char, string>>, AZNode::CompareAlphabets>& codes) 
+    { 
+        encode("", codes); 
+    }
+    // Draws the huffman tree
+    virtual void drawNode (char link, int depth) const = 0;  
     // Draws the huffman tree rooted at t.  Invokes the serves of the 
     // overloaded version to do the real work.
     virtual void drawNode () { drawNode('-', 0); }
 	// frequency getter
 	double getFrequency () const { return frequency; }
+    // Compare the frequency, smaller first
+    class CompareFreq
+    {
+    public:
+        bool operator()(HuffmanNode const * node1, HuffmanNode const * node2) {
+            // return "true" if "node2" freq is ordered before "node1" freq
+            return node1->frequency > node2->frequency;
+        }
+    };
 };
 
 // CharNode is a subclass of HuffmanNode (extends) for characters ('A' - 'Z')
 class CharNode : public HuffmanNode {
 private:
-	// character as data
-	char character;
+	char character;     // character as data
 public:
 	// Constructor
 	CharNode (char ch, double freq): HuffmanNode(freq), character(ch) { }
-	// member function printCodes: print characters ('A' - 'Z')
-	// const override: a virtual function overrides another virtual function
-	// http://en.cppreference.com/w/cpp/language/override
-	void printCodes (string bitString) const override {	// overrides parent printCodes function
-		cout << character << " : " << bitString << '\n';		// Ex: "A : "
+	// member function encode
+	void encode (string bitString, 
+        priority_queue<pair<char, string>, vector<pair<char, string>>, 
+        AZNode::CompareAlphabets>& codes) override
+    {	
+        codes.push(make_pair(character, bitString));    // add to the sorted queue ("char: codes")
 	}
     // overrides the drawNode from superclass HuffmanNode to draw the leaves Ex: "/ [O:0.078509]"
     void drawNode (char link, int depth) const override {
@@ -81,11 +121,14 @@ public:
 	InteriorNode (double freq, HuffmanNode *lf, HuffmanNode *rt) :
 		HuffmanNode(freq), left(lf), right(rt) { }
 	// member function
-	void printCodes (string bitString) const override {	// overrides parent printCodes function
+	void encode (string bitString, 
+        priority_queue<pair<char, string>, vector<pair<char, string>>, 
+        AZNode::CompareAlphabets>& codes) override
+    {	
 		if (left != nullptr) 
-			left->printCodes(bitString + '0');					// encode 0 for the lefts
+			left->encode(bitString + '0', codes);					// encode 0 for the lefts
 		if (right != nullptr)
-			right->printCodes(bitString + '1');                 // encode 1 for the rights
+			right->encode(bitString + '1', codes);                 // encode 1 for the rights
 	}
     // overrides the drawNode from superclass HuffmanNode to draw the non-leaves Ex: "/ (0.152436)"
     void drawNode (char link, int depth) const override {
@@ -102,17 +145,6 @@ public:
     }
 };
 
-// Customed strict weak ordering for the priority queue
-// https://stackoverflow.com/a/19535699/8969722
-class CompareFreq
-{
-public:
-    bool operator()(HuffmanNode const * node1, HuffmanNode const * node2) {
-        // return "true" if "node2" freq is ordered before "node1" freq
-        return node1->getFrequency() > node2->getFrequency();   // smallest frequency stay on top => first out
-    }
-};
-
 /*********** END OF THE CLASS PART ***********/
 
 /*********** THE FUNCTIONS PART ***********/
@@ -125,7 +157,8 @@ vector<pair<char, double>> printFrequency(int* freq, int total) {
         char ch =  static_cast<char>(i);        // the character
         int frequency = freq[i-'A'];            // the frequency of the character
         // keep adding each character with its % frequency (its frequency / total)
-        symbols.push_back(make_pair(ch, round(1000000.0 * frequency / total) / 1000000.0)); // rounded to 6 numbers after the decimal point
+        symbols.push_back(make_pair(ch, 
+            round(1000000.0 * frequency / total) / 1000000.0)); // rounded to 6 numbers after the decimal point
 
         cout << ch << ": " << frequency << '\n';
     }
@@ -134,14 +167,9 @@ vector<pair<char, double>> printFrequency(int* freq, int total) {
     return symbols;
 }
 
-// HuffmanNode *huffman(const vector<pair<char, double>>& symbols) {
-//     // Make an empty priority queue
-//     priority_queue<Huffman *>
-// }
-
 HuffmanNode *build_huffman(const vector<pair<char, double>>& symbols) {
     // Make an empty priority queue
-    priority_queue<HuffmanNode*, vector<HuffmanNode*>, CompareFreq> queue;
+    priority_queue<HuffmanNode*, vector<HuffmanNode*>, HuffmanNode::CompareFreq> queue;
     // Make a forest of single-node trees and place them in the priority queue
     for (auto p : symbols)
         queue.push(new CharNode(p.first, p.second));
@@ -163,6 +191,16 @@ HuffmanNode *build_huffman(const vector<pair<char, double>>& symbols) {
     return root;
 }
 
+void encode(priority_queue<pair<char, string>, vector<pair<char, string>>, 
+    AZNode::CompareAlphabets> codes) 
+{
+    while(codes.size() > 0) {
+        pair<char, string> code = codes.top();
+        codes.pop();
+        cout << code.first << ": " << code.second << '\n';
+    }
+}
+
 int main() {
     char ch;                    // each letter
     int total;                  // the total number of letters
@@ -180,7 +218,7 @@ int main() {
     // Reading the text
     inFile >> noskipws;         // including the whitespace
     while (inFile >> ch) {
-        cout << ch;        // printing out the texts
+        cout << ch;             // printing out the texts
         freq[toupper(ch) - 'A']++;         // adding 1 to the frequency of the letter (capitialized)
         if (isalpha(toupper(ch))) total++;                 // increase the number of letter
     }
@@ -190,9 +228,17 @@ int main() {
     // print out the frequencies
     HuffmanNode *root = build_huffman(printFrequency(freq, total));
     cout << "---------------------------------" << '\n' << '\n';
+
     // build Huffman tree
     root->drawNode();
     cout << "---------------------------------" << '\n' << '\n';
-    root->printCodes();
-    inFile.close();
+
+    priority_queue<pair<char, string>, vector<pair<char, string>>, 
+        AZNode::CompareAlphabets> sortedEncodeds; 
+    // attach encoded bits to each character
+    root->encode(sortedEncodeds);
+    // print encoded bits with each character
+    encode(sortedEncodeds);
+    
+    inFile.close();     
 }
