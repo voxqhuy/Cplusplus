@@ -1,9 +1,9 @@
 #include <fstream>
-#include <iostream>
+#include <iostream>     // std::cout, std::fixed
 #include <string>
-#include <queue>          // std::priority_queue
-#include <vector>         // std::vector
-#include <math.h>       /* round, floor, ceil, trunc */
+#include <queue>        // std::priority_queue
+#include <vector>       // std::vector
+#include <math.h>       // round, floor, ceil, trunc 
 #include <iomanip>      // std::setprecision
 using namespace std;
 
@@ -21,6 +21,7 @@ using namespace std;
 
 // Huffman Node class
 class HuffmanNode {
+private:
 	// Frequency as data
 	double frequency;
 public:
@@ -32,7 +33,7 @@ public:
     // virtual function:  To implement polymorphism
     // if the superclass pointer is aiming at a subclass objects, and invoke a virtual function
     // that is overridden by the subclass, the subclass version will be invoked, instead of the superclass version
-	virtual void printCodes (std::string bitString) const = 0;
+	virtual void printCodes (string bitString) const = 0;
 	// Start printing the bitString (blank at first).
     // Invokes the serves of the overloaded version to do the real work.
 	virtual void printCodes () { printCodes(""); }
@@ -47,6 +48,7 @@ public:
 
 // CharNode is a subclass of HuffmanNode (extends) for characters ('A' - 'Z')
 class CharNode : public HuffmanNode {
+private:
 	// character as data
 	char character;
 public:
@@ -55,22 +57,23 @@ public:
 	// member function printCodes: print characters ('A' - 'Z')
 	// const override: a virtual function overrides another virtual function
 	// http://en.cppreference.com/w/cpp/language/override
-	void printCodes (std::string bitString) const override {	// overrides parent printCodes function
+	void printCodes (string bitString) const override {	// overrides parent printCodes function
 		cout << character << " : " << bitString << '\n';		// Ex: "A : "
 	}
     // overrides the drawNode from superclass HuffmanNode to draw the leaves Ex: "/ [O:0.078509]"
-    void drawNode (char link, int depth) {
+    void drawNode (char link, int depth) const override {
         // Start drawing the node
         for (int i = 0; i < depth; i++) {
-            std::cout << "   ";     // Add some space for depth
+            cout << "     ";     // Add some space for depth
         }
-        std::cout << link << " [" << character << ':' << std::setprecision(6) // rounded to 6 digits after decimal point
-            << HuffmanNode::getFrequency() << ']' << '\n';      // drawing the node
+        cout << link << " [" << character << ':' << fixed       // rounded to 6 digits after decimal point
+            << setprecision(6) << HuffmanNode::getFrequency() << ']' << '\n';   // drawing the node
     }
 };
 
 // InteriorNode is a subclass of HuffmanNode (extends). The most basic node in Huffman tree
 class InteriorNode : public HuffmanNode {
+private:
 	HuffmanNode *left;		    // left subtree pointer
 	HuffmanNode *right;		    // right subtree pointer
 public:
@@ -78,7 +81,7 @@ public:
 	InteriorNode (double freq, HuffmanNode *lf, HuffmanNode *rt) :
 		HuffmanNode(freq), left(lf), right(rt) { }
 	// member function
-	void printCodes (std::string bitString) const override {	// overrides parent printCodes function
+	void printCodes (string bitString) const override {	// overrides parent printCodes function
 		if (left != nullptr) 
 			left->printCodes(bitString + '0');					// encode 0 for the lefts
 		if (right != nullptr)
@@ -90,9 +93,10 @@ public:
         right->drawNode ('/', depth + 1);
         // Start drawing the node
         for (int i = 0; i < depth; i++) {
-            std::cout << "   ";     // Add some space for depth
+            cout << "     ";     // Add some space for depth
         }
-        std::cout << link << " (" << std::setprecision(6) << HuffmanNode::getFrequency() << ')' << '\n';
+        cout << link << " (" << fixed << setprecision(6)
+            << HuffmanNode::getFrequency() << ')' << '\n';
         // Start drawing everything on the right recursively
         left->drawNode ('\\', depth + 1);
     }
@@ -111,37 +115,6 @@ public:
 
 /*********** END OF THE CLASS PART ***********/
 
-// /*********** START OF THE DRAWING PART ***********/
-
-// // Draws the huffman tree rooted at t.  Invokes the serves of the 
-// // overloaded version to do the real work.
-// void draw(HuffmanNode *node) {
-// 	draw(node, '-', 0);
-// }
-
-// // Draws the rest of huffman tree rooted at t.  
-// // "link" is a symbol to print in front of the node to which t points
-// // indicating the direction of the branch leading to the node.
-// // "depth" is proportional to depth of the node to which p points.
-// template <typename T>
-// static void draw(HuffmanNode *node, char link, int depth) {
-//     // Check if the node is null, end the function
-//     if (node == nullptr) return;
-
-//     // Start drawing everything on the right recursively
-//     draw (node->right, '/', depth + 1);
-//     // Start drawing the root
-//     // THE DRAWING PART
-//     for (int i = 0; i < depth; i++) {
-//         std::cout << "   ";     // Add some space for depth
-//     }
-//     std::cout << link << " [" << t->data << ']' << "\n"; // drawing the node
-//     // Start drawing everything on the right recursively
-//     draw (t->left, '\\', depth + 1);
-// }
-
-/*********** END OF THE DRAWING PART ***********/
-
 /*********** THE FUNCTIONS PART ***********/
 
 vector<pair<char, double>> printFrequency(int* freq, int total) {
@@ -152,11 +125,11 @@ vector<pair<char, double>> printFrequency(int* freq, int total) {
         char ch =  static_cast<char>(i);        // the character
         int frequency = freq[i-'A'];            // the frequency of the character
         // keep adding each character with its % frequency (its frequency / total)
-        symbols.push_back(std::make_pair(ch, round(1000000.0 * frequency / total) / 1000000.0)); // rounded to 6 numbers after the decimal point
+        symbols.push_back(make_pair(ch, round(1000000.0 * frequency / total) / 1000000.0)); // rounded to 6 numbers after the decimal point
 
-        std::cout << ch << ": " << frequency << '\n';
+        cout << ch << ": " << frequency << '\n';
     }
-    std::cout << "Total = " << total << '\n';        // print the total
+    cout << "Total = " << total << '\n';        // print the total
 
     return symbols;
 }
@@ -201,23 +174,25 @@ int main() {
     inFile.open("D:\\iRoommm\\Web dev\\Github copies\\C-\\Huffman Tree\\declaration.text");
     // Check if the text file could be opened
     if (!inFile) {
-        std::cout  << "Unable to open file declaration.text";
+        cout  << "Unable to open file declaration.text";
         exit(1);                // Unable to open the file, exit the function
     }
     // Reading the text
     inFile >> noskipws;         // including the whitespace
     while (inFile >> ch) {
-        std::cout << ch;        // printing out the texts
-        freq[std::toupper(ch) - 'A']++;         // adding 1 to the frequency of the letter (capitialized)
-        if (isalpha(std::toupper(ch))) total++;                 // increase the number of letter
+        cout << ch;        // printing out the texts
+        freq[toupper(ch) - 'A']++;         // adding 1 to the frequency of the letter (capitialized)
+        if (isalpha(toupper(ch))) total++;                 // increase the number of letter
     }
 
-    std::cout << '\n' << "Counts:" << '\n' << "-------" << '\n';
+    cout << '\n' << "Counts:" << '\n' << "-------" << '\n';
     // make a vector pair with format "char: frequency" (Ex: A: 0.003)
     // print out the frequencies
     HuffmanNode *root = build_huffman(printFrequency(freq, total));
-    std::cout << "---------------------------------" << '\n';
+    cout << "---------------------------------" << '\n' << '\n';
     // build Huffman tree
     root->drawNode();
+    cout << "---------------------------------" << '\n' << '\n';
+    root->printCodes();
     inFile.close();
 }
