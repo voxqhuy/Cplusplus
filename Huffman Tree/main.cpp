@@ -145,8 +145,6 @@ public:
     }
 };
 
-/*********** END OF THE CLASS PART ***********/
-
 /*********** THE FUNCTIONS PART ***********/
 
 vector<pair<char, double>> printFrequency(int* freq, int total) {
@@ -191,7 +189,7 @@ HuffmanNode *build_huffman(const vector<pair<char, double>>& symbols) {
     return root;
 }
 
-void encode(priority_queue<pair<char, string>, vector<pair<char, string>>, 
+void printCodes(priority_queue<pair<char, string>, vector<pair<char, string>>, 
     AZNode::CompareAlphabets> codes) 
 {
     while(codes.size() > 0) {
@@ -238,7 +236,7 @@ int main() {
     // attach encoded bits to each character
     root->encode(sortedEncodeds);
     // print encoded bits with each character
-    encode(sortedEncodeds);
+    printCodes(sortedEncodeds);
     
     inFile.close();     
 }
