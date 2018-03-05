@@ -1,3 +1,11 @@
+
+//  Name: Vo Huy
+//  Assignment number: 4
+//  Assignment: Huffman Coding Tree
+//  File name: main.cpp
+//  Date last modified: March 4, 2018
+//  Honor statement: I have neither given nor received any unauthorized help on this assignment. 
+
 /* NOTICES 
     1. These classes are based on class 318 lecture at SAU by Dr. Halterman
 
@@ -20,7 +28,7 @@
 /*   
    Huffman Node's visualization: 
  
-          (Huffman Node)
+          (Huffman Node)  <---- (AZNode) 'AZNode' has an orderding class to sort A-Z 
 			 ^	  ^
 			/      \
 		   /		\
