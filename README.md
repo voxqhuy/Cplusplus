@@ -3,7 +3,7 @@ C ++ basic programs
 
 ![alt text](https://prod-discovery.edx-cdn.org/media/course/image/72abaeb3-0856-4e89-906a-8b6eef402a1f-05baa5c78f1f.small.jpg)
 
-Sorted in order: **_Easy_**, **_Medium_** and **_Hard_**
+Sorted in order: **_Easy_**, **_Medium_**, and **_Hard_**
 The order is based on the complexity of algorithms, from my own experience and webiste geeksforgeeks.org.
 Program Descriptions:
 
