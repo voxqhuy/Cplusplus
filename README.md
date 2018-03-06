@@ -6,7 +6,7 @@ The order is based on the complexity of algorithms, from my own experience and w
 Program Descriptions:
 
 B. **_Medium_**
-1. Linked List
+1. **Linked List**:
 An implementation of a generic singly linked list. Example functions included are:
   + **operator[]**: the indexing operator allows a client to access an element by its offset from the beginning of the list. As with std::vectors and arrays, the method's behavior is undefined if the client provides an index out of range (this means you need not defend against such attempts). Your method necessarily will be less efficient than **std::vector::operator[]** because linked lists do not support random access.
   + **prepend**: appends an element onto the front of the list. (The class currently offers an insert method that adds an element to the back of the list.)
@@ -15,7 +15,7 @@ An implementation of a generic singly linked list. Example functions included ar
   + **unique**: returns *true* if all of the elements of the list are unique; that is, the list contains no duplicate elements. If at least one of the elements in the list appears more than one time, the method should return *false*. This method should not disturb the contents of the list.
 
 C. **_Hard_**
-1. Huffman Tree
+1. **Huffman Tree**:
 Read a text file (the Declaration of Independence in this case), count the frequencies of each charater (uppercased), build a Huffman tree out of the frequencies (%), and encode to bit strings.
 
 ```shell
