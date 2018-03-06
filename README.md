@@ -8,11 +8,11 @@ Program Descriptions:
 B. Medium
 1. Linked List
 An implementation of a generic singly linked list. Example functions included are:
-  + operator[]—the indexing operator allows a client to access an element by its offset from the beginning of the list. As with std::vectors and arrays, the method's behavior is undefined if the client provides an index out of range (this means you need not defend against such attempts). Your method necessarily will be less efficient than std::vector::operator[] because linked lists do not support random access.
-  + prepend—appends an element onto the front of the list. (The class currently offers an insert method that adds an element to the back of the list.)
-  + member—accepts an argument of the same type as the elements in the list. The function returns true if the argument appears in the list; otherwise, the function returns false.
-  + operator==—returns true if a list passed as a parameter contains the same elements in the same order as this list; otherwise, the method returns false. This method should not copy the elements in the list passed to it, and it should not disturb the contents of either list.
-  + unique—returns true if all of the elements of the list are unique; that is, the list contains no duplicate elements. If at least one of the elements in the list appears more than one time, the method should return false. This method should not disturb the contents of the list.
+  + **operator[]**: the indexing operator allows a client to access an element by its offset from the beginning of the list. As with std::vectors and arrays, the method's behavior is undefined if the client provides an index out of range (this means you need not defend against such attempts). Your method necessarily will be less efficient than **std::vector::operator[]** because linked lists do not support random access.
+  + **prepend**: appends an element onto the front of the list. (The class currently offers an insert method that adds an element to the back of the list.)
+  + **member**: accepts an argument of the same type as the elements in the list. The function returns *true* if the argument appears in the list; otherwise, the function returns *false*.
+  + **operator==**: returns *true* if a list passed as a parameter contains the same elements in the same order as this list; otherwise, the method returns *false*. This method should not copy the elements in the list passed to it, and it should not disturb the contents of either list.
+  + **unique**: returns *true* if all of the elements of the list are unique; that is, the list contains no duplicate elements. If at least one of the elements in the list appears more than one time, the method should return *false*. This method should not disturb the contents of the list.
 
 C. Hard
 1. Huffman Tree
