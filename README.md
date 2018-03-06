@@ -1,7 +1,7 @@
 # C-
 C ++ basic programs
 
-Sorted in order: Easy, Medium and Hard
+Sorted in order: **_Easy_**, **_Medium_** and **_Hard_**
 The order is based on the complexity of algorithms, from my own experience and webiste geeksforgeeks.org.
 Program Descriptions:
 
