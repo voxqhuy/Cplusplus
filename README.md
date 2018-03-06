@@ -7,6 +7,7 @@ Program Descriptions:
 
 C. Hard
 1. Huffman Tree
+Read a text file (the Declaration of Independence in this case), count the frequencies of each charater (uppercased), build a Huffman tree out of the frequencies (%), and encode to bit strings.
 
 ```shell
 C:\Users\vohuy\Documents\Huffman\>huffman.exe < declaration.text
