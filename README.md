@@ -15,6 +15,37 @@ An implementation of a generic singly linked list. Example functions included ar
   + **member**: accepts an argument of the same type as the elements in the list. The function returns *true* if the argument appears in the list; otherwise, the function returns *false*.
   + **operator==**: returns *true* if a list passed as a parameter contains the same elements in the same order as this list; otherwise, the method returns *false*. This method should not copy the elements in the list passed to it, and it should not disturb the contents of either list.
   + **unique**: returns *true* if all of the elements of the list are unique; that is, the list contains no duplicate elements. If at least one of the elements in the list appears more than one time, the method should return *false*. This method should not disturb the contents of the list.
+  
+2. **Binary Tree Builder**:
+Building a Binary Tree from Traversals
+
+For example: If it is given the traversals of these two trees:
+
+pre{36, 100, 11, 3, 10, 5, 2, 8},
+in{11, 100, 10, 3, 5, 36, 8, 2};
+
+pre{"Xena", "Albert", "Quin", "Pat", "Henry", "Kit"},
+in{"Quin", "Albert", "Pat", "Xena", "Kit", "Henry"};
+
+The program will build
+```shell
+
+   /[2]
+      \[8]
+-[36]
+         /[5]
+      /[3]
+         \[10]
+   \[100]
+      \[11]
+====================
+   /[Henry]
+      \[Kit]
+-[Xena]
+      /[Pat]
+   \[Albert]
+      \[Quin]
+```
 
 C. **_Hard_**
 1. **Huffman Tree**:
