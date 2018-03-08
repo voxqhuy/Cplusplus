@@ -115,7 +115,7 @@ public:
             cout << "     ";     // Add some space for depth
         }
         cout << link << " [" << character << ':' << fixed       // rounded to 6 digits after decimal point
-            << setprecision(6) << HuffmanNode::getFrequency() << ']' << '\n';   // drawing the node
+            << setprecision(4) << HuffmanNode::getFrequency() << ']' << '\n';   // drawing the node
     }
 };
 
@@ -146,7 +146,7 @@ public:
         for (int i = 0; i < depth; i++) {
             cout << "     ";     // Add some space for depth
         }
-        cout << link << " (" << fixed << setprecision(6)
+        cout << link << " (" << fixed << setprecision(4)
             << HuffmanNode::getFrequency() << ')' << '\n';
         // Start drawing everything on the right recursively
         left->drawNode ('\\', depth + 1);
