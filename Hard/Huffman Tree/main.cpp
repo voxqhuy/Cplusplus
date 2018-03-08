@@ -160,13 +160,15 @@ vector<pair<char, double>> printFrequency(int* freq, int total) {
     vector<pair<char, double>> symbols;
     // Loop through the freq array (keeping frequencies of 26 elements)
     for(int i = 'A'; i <= 'Z'; i++) {
-        char ch =  static_cast<char>(i);        // the character
-        int frequency = freq[i-'A'];            // the frequency of the character
-        // keep adding each character with its % frequency (its frequency / total)
-        symbols.push_back(make_pair(ch, 
-            round(1000000.0 * frequency / total) / 1000000.0)); // rounded to 6 numbers after the decimal point
+        if (freq[i-'A'] != 0) { 
+            char ch =  static_cast<char>(i);        // the character
+            int frequency = freq[i-'A'];            // the frequency of the character
+            // keep adding each character with its % frequency (its frequency / total)
+            symbols.push_back(make_pair(ch, 
+                round(1000000.0 * frequency / total) / 1000000.0)); // rounded to 6 numbers after the decimal point
 
-        cout << ch << ": " << frequency << '\n';
+            cout << ch << ": " << frequency << '\n';
+        }
     }
     cout << "Total = " << total << '\n';        // print the total
 
@@ -215,7 +217,7 @@ int main() {
 
     // Using the text file as input
     ifstream inFile;
-    inFile.open("D:\\iRoommm\\Web dev\\Github copies\\C-\\Huffman Tree\\declaration.text");
+    inFile.open("D:\\iRoommm\\Web dev\\Github copies\\C-\\hard\\Huffman Tree\\declaration.text");
     // Check if the text file could be opened
     if (!inFile) {
         cout  << "Unable to open file declaration.text";
