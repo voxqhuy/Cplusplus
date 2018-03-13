@@ -217,7 +217,7 @@ int main() {
 
     // Using the text file as input
     ifstream inFile;
-    inFile.open("D:\\iRoommm\\Web dev\\Github copies\\C-\\hard\\Huffman Tree\\declaration.text");
+    inFile.open("declaration.text");
     // Check if the text file could be opened
     if (!inFile) {
         cout  << "Unable to open file declaration.text";
