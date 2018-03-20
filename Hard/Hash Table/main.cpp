@@ -51,13 +51,25 @@ public:
 };
 
 // checking for an omission
-void checkOmission(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {      // this function is changing hashtable
-
+void checkOmission(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {  
+    // Try adding a single letter at all possible places in the word
+    // If any of these new words match a word in the hash table, push into the queue for printing later
+    for (int i = 0; i <= userInput.length(); i++) {
+        for (char j = 'a'; char <= 'z'; i++) {
+            string testingWord = userInput.insert(i, j);
+            if hashTable.contains(testingWord) 
+                correctedWords.push(testingWord);
+        }
+    }
 }
 
 // checking for an extra letter
 void checkExtra(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {
-
+    StringBuilder testingWord = new StringBuilder(userInput);
+    for (int i = 0; i < userInput.length(); i++) {
+        if hashTable.contains(testingWord.deleteCharAt(i).toString()) 
+            correctedWords.push(testingWord);
+    }
 }
 
 // checking for a typo
@@ -75,9 +87,11 @@ void checkMissingSpace(string userInput, HashTable* hashTable, priority_queue<st
 
 }
 
+// Attempt to correct the user input
 void correction(string userInput, HashTable* hashTable) {
     // Make an empty priority queue
     priority_queue<string> correctedWords;
+    // Note: The functions below CHANGE correctedWords
     // check if the user omitted a letter
     checkOmission(userInput, hashTable, correctedWords);
     // check if the user added an extraneous letter
@@ -102,7 +116,7 @@ void correction(string userInput, HashTable* hashTable) {
 
 int main() {
     HashTable* hashTable = new HashTable(109582, "dictionary.txt");
-    cout << hashTable->size();
+    cout << hashTable->size();      // For testing. TODO: erase this
     string userInput;
 
     while (userInput != ".") {
