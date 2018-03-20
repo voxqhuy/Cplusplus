@@ -9,6 +9,7 @@
 #include <vector>       // std::vector
 #include <string>
 #include <queue>        // std::priority_queue
+#include <cstddef>      // std::size_t
 using namespace std;
 
 class HashTable {
@@ -53,22 +54,27 @@ public:
 // checking for an omission
 void checkOmission(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {  
     // Try adding a single letter at all possible places in the word
-    // If any of these new words match a word in the hash table, push into the queue for printing later
-    for (int i = 0; i <= userInput.length(); i++) {
-        for (char j = 'a'; char <= 'z'; i++) {
-            string testingWord = userInput.insert(i, j);
-            if hashTable.contains(testingWord) 
+    // If any match a word in the hash table, push into the queue for printing later
+    for (size_t i = 0; i <= userInput.length(); i++) {
+        for (char j = 'a'; j <= 'z'; j++) {
+            string testingWord = userInput.insert(i, string(1, j));        // FIXME: j doesn't work, has to convert j to string??
+            if (hashTable->contains(testingWord)) {
                 correctedWords.push(testingWord);
+            }
         }
     }
 }
 
 // checking for an extra letter
 void checkExtra(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {
-    StringBuilder testingWord = new StringBuilder(userInput);
-    for (int i = 0; i < userInput.length(); i++) {
-        if hashTable.contains(testingWord.deleteCharAt(i).toString()) 
+    // Try removing a single letter from the word
+    // If any match a word in the hash table, push into the queue for printing later
+    // StringBuilder testingWord = new StringBuilder(userInput);
+    for (size_t i = 0; i < userInput.length(); i++) {
+        string testingWord = userInput.erase(i, 1);
+        if (hashTable->contains(testingWord)) {
             correctedWords.push(testingWord);
+        }
     }
 }
 
