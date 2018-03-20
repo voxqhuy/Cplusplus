@@ -52,5 +52,13 @@ public:
 int main() {
     HashTable* hashTable = new HashTable(109582, "dictionary.txt");
     cout << hashTable->size();
+    string userInput;
+    while (userInput != ".") {
+        cout << "Please enter a word (type a single period '.' to terminate): ";
+        cin >> userInput;
+    }
+    
+
+    delete hashTable;
     return 0;
 }
