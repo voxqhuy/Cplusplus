@@ -51,8 +51,19 @@ public:
     }
 };
 
+// Ordering a to z
+class CompareAlphabets
+{
+public:
+    bool operator()(string str1, string str2) {
+        // return A is ordered after Z
+        return str1 > str2; 
+    }
+};
+
 // checking for an omission
-void checkOmission(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {  
+void checkOmission(string userInput, HashTable* hashTable, 
+    priority_queue<string, std::vector<string>, CompareAlphabets>& correctedWords) {  
     // Try adding a single letter at all possible places in the word
     // If any match a word in the hash table, push into the queue for printing later
     for (size_t i = 0; i <= userInput.length(); i++) {
@@ -66,7 +77,8 @@ void checkOmission(string userInput, HashTable* hashTable, priority_queue<string
 }
 
 // checking for an extra letter
-void checkExtra(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {
+void checkExtra(string userInput, HashTable* hashTable, 
+    priority_queue<string, std::vector<string>, CompareAlphabets>& correctedWords) {
     // Try removing a single letter from the word
     // If any match a word in the hash table, push into the queue for printing later
     for (size_t i = 0; i < userInput.length(); i++) {
@@ -78,7 +90,8 @@ void checkExtra(string userInput, HashTable* hashTable, priority_queue<string>& 
 }
 
 // checking for a typo
-void checkTypo(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {
+void checkTypo(string userInput, HashTable* hashTable, 
+    priority_queue<string, std::vector<string>, CompareAlphabets>& correctedWords) {
     // Try replacing an existing letter in the word with some other letter
     // If any match a word in the hash table, push into the queue for printing later
     for (size_t i = 0; i < userInput.length(); i++) {
@@ -92,7 +105,8 @@ void checkTypo(string userInput, HashTable* hashTable, priority_queue<string>& c
 }
 
 // checking for a transposition
-void checkTransposition(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {
+void checkTransposition(string userInput, HashTable* hashTable, 
+    priority_queue<string, std::vector<string>, CompareAlphabets>& correctedWords) {
     // Try transposing adjacent letters
     // If any match a word in the hash table, push into the queue for printing later
     for (size_t i = 0; i < userInput.length() - 1; i++) {
@@ -105,7 +119,8 @@ void checkTransposition(string userInput, HashTable* hashTable, priority_queue<s
 }
 
 // checking for a missing space
-void checkMissingSpace(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {
+void checkMissingSpace(string userInput, HashTable* hashTable, 
+    priority_queue<string, std::vector<string>, CompareAlphabets>& correctedWords) {
     // Try adding a single space at all possible places in the word
     // If any match a word in the hash table, push into the queue for printing later
     for (size_t i = 1; i < userInput.length(); i++) {
@@ -119,7 +134,7 @@ void checkMissingSpace(string userInput, HashTable* hashTable, priority_queue<st
 // Attempt to correct the user input
 void correction(string userInput, HashTable* hashTable) {
     // Make an empty priority queue
-    priority_queue<string> correctedWords;
+    priority_queue<string, std::vector<string>, CompareAlphabets> correctedWords;
     // Note: The functions below CHANGE correctedWords
     // check if the user omitted a letter
     checkOmission(userInput, hashTable, correctedWords);
