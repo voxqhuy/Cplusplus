@@ -88,7 +88,15 @@ void correction(HashTable hashTable) {
     // check if the user forgot to add a space
     checkMissingSpace(correctedWords);
 
-    
+    // print out corrected words in alphabetic order, if there's none, print ???
+    if (correctedWords.empty()) {
+        cout << "???";
+    } else {
+        while (!correctedWords.empty()) {
+            cout << correctedWords.top();
+            correctedWords.pop();
+        }
+    }
 }
 
 int main() {
