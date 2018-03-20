@@ -12,13 +12,42 @@
 #include <cstddef>      // std::size_t
 using namespace std;
 
+// Each Node in HashTable
+class HashNode {
+private:
+    int mKey;
+    string mValue;
+public:
+    // Constructor
+    HashNode(int key, string value): mKey(key), mValue(value) {}
+    int getKey() {
+        return key;
+    }
+    string getValue() {
+        return value;
+    }
+}
+
+// HashTable class
 class HashTable {
 private:
-    int mTableSize;
+    // hash nodes array
+    HashNode<int, string> **nodesArray;
+    // hash table size
+    unsigned mTableSize;
     string mFileName;
 public:
     // Constructor
-    HashTable (int tableSize, string fileName): mTableSize(tableSize), mFileName(fileName) {}
+    HashTable (unsigned tableSize, string fileName) {
+        this->mTableSize = tableSize;
+        this->mFileName = fileName;
+        // Initialize the size of hash table
+        nodesArray = new HashNode<int, string>*[tableSize];
+
+        // initialize all nodes as null
+        for (unsigned i = 0; i < tableSize; i++) 
+            nodesArray[i] = null;
+    }
 
     // hash function maps a string to an index within the table
     void hash() {
@@ -51,12 +80,12 @@ public:
     }
 };
 
-// Ordering a to z
+// Ordering a to z for priority queue
 class CompareAlphabets
 {
 public:
     bool operator()(string str1, string str2) {
-        // return A is ordered after Z
+        // return a is ordered after z
         return str1 > str2; 
     }
 };
