@@ -70,7 +70,7 @@ void checkExtra(string userInput, HashTable* hashTable, priority_queue<string>& 
     // Try removing a single letter from the word
     // If any match a word in the hash table, push into the queue for printing later
     for (size_t i = 0; i < userInput.length(); i++) {
-        string testingWord = userInput;     
+        string testingWord = userInput;         // make a copy of userInput to test
         if (hashTable->contains(testingWord.erase(i, 1))) {
             correctedWords.push(testingWord);
         }
@@ -93,12 +93,27 @@ void checkTypo(string userInput, HashTable* hashTable, priority_queue<string>& c
 
 // checking for a transposition
 void checkTransposition(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {
-
+    // Try transposing adjacent letters
+    // If any match a word in the hash table, push into the queue for printing later
+    for (size_t i = 0; i < userInput.length() - 1; i++) {
+        string testingWord = userInput;         // make a copy of userInput to test
+        swap(testingWord[i], testingWord[i + 1]);       // swapping 2 adjacent elements
+        if (hashTable->contains(testingWord)) {
+            correctedWords.push(testingWord);
+        }
+    }
 }
 
 // checking for a missing space
 void checkMissingSpace(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {
-
+    // Try adding a single space at all possible places in the word
+    // If any match a word in the hash table, push into the queue for printing later
+    for (size_t i = 1; i < userInput.length(); i++) {
+        string testingWord = userInput;         // make a copy of userInput to test 
+        if (hashTable->contains(testingWord.insert(i, string(1, ' ')))) { // FIXME: j doesn't work, has to convert j to string??
+            correctedWords.push(testingWord);
+        }
+    }
 }
 
 // Attempt to correct the user input

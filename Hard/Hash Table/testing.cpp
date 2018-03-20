@@ -26,17 +26,18 @@ using namespace std;
 //     }
 // }
 
-// checking for an extra letter
-void checkExtra(string userInput) {
-    // Try removing a single letter from the word
-    // If any match a word in the hash table, push into the queue for printing later
-    // StringBuilder testingWord = new StringBuilder(userInput);
-    cout << userInput;
-    string testingWord = userInput.erase(1, 1);
-    cout << userInput << testingWord;
-}
+// // checking for an extra letter
+// void checkExtra(string userInput) {
+//     // Try removing a single letter from the word
+//     // If any match a word in the hash table, push into the queue for printing later
+//     // StringBuilder testingWord = new StringBuilder(userInput);
+//     cout << userInput;
+//     string testingWord = userInput.erase(1, 1);
+//     cout << userInput << testingWord;
+// }
 
 int main() {
-    checkExtra("bad");
+    string a = "bad";
+    cout << a.insert(2, string(1, ' '));
     return 0;
 }
