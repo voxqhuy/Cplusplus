@@ -3,7 +3,7 @@
 //  Assignment number: 4
 //  Assignment: Huffman Coding Tree
 //  File name: main.cpp
-//  Date last modified: March 4, 2018
+//  Date last modified: March 14, 2018
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment. 
 
 /* NOTICES 
@@ -115,7 +115,7 @@ public:
             cout << "     ";     // Add some space for depth
         }
         cout << link << " [" << character << ':' << fixed       // rounded to 6 digits after decimal point
-            << setprecision(4) << HuffmanNode::getFrequency() << ']' << '\n';   // drawing the node
+            << setprecision(6) << HuffmanNode::getFrequency() << ']' << '\n';   // drawing the node
     }
 };
 
@@ -146,7 +146,7 @@ public:
         for (int i = 0; i < depth; i++) {
             cout << "     ";     // Add some space for depth
         }
-        cout << link << " (" << fixed << setprecision(4)
+        cout << link << " (" << fixed << setprecision(6)
             << HuffmanNode::getFrequency() << ')' << '\n';
         // Start drawing everything on the right recursively
         left->drawNode ('\\', depth + 1);
@@ -215,20 +215,12 @@ int main() {
     // An array to keep the frequencies
     int freq[26] = { };         // initialize all frequencies to 0
 
-    // Using the text file as input
-    ifstream inFile;
-    inFile.open("declaration.text");
-    // Check if the text file could be opened
-    if (!inFile) {
-        cout  << "Unable to open file declaration.text";
-        exit(1);                // Unable to open the file, exit the function
-    }
     // Reading the text
-    inFile >> noskipws;         // including the whitespace
-    while (inFile >> ch) {
+    while (!std::cin.eof()) {
+        ch = std::cin.get();            
         cout << ch;             // printing out the texts
         freq[toupper(ch) - 'A']++;         // adding 1 to the frequency of the letter (capitialized)
-        if (isalpha(toupper(ch))) total++;                 // increase the number of letter
+        if (isalpha(toupper(ch))) total++; // increase the number of letter
     }
 
     cout << '\n' << "Counts:" << '\n' << "-------" << '\n';
@@ -247,6 +239,4 @@ int main() {
     root->encode(sortedEncodeds);
     // print encoded bits with each character
     printCodes(sortedEncodeds);
-    
-    inFile.close();     
 }
