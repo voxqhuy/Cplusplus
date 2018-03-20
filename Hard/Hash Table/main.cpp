@@ -39,7 +39,7 @@ public:
 
     // returns true if the hash table contains a given string
     // otherwise, the method returns false if the string is not present
-    bool contains() {
+    bool contains(string str) {
         return false;
     }
 
@@ -49,16 +49,67 @@ public:
     }
 };
 
+// checking for an omission
+void checkOmission(HashTable& hashtable) {      // this function is changing hashtable
+
+}
+
+// checking for an extra letter
+checkExtra(HashTable& hashtable) {
+
+}
+
+// checking for a typo
+checkTypo(HashTable& hashtable) {
+
+}
+
+// checking for a transposition
+checkTransposition(HashTable& hashtable) {
+
+}
+
+// checking for a missing space
+checkMissingSpace(HashTable& hashtable) {
+
+}
+
+void correction(HashTable hashTable) {
+    // Make an empty priority queue
+    priority_queue<string> correctedWords;
+    // check if the user omitted a letter
+    checkOmission(correctedWords);
+    // check if the user added an extraneous letter
+    checkExtra(correctedWords);
+    // check if the user mistyped a letter
+    checkTypo(correctedWords);
+    // check if the user tranposed 2 adjacent letter
+    checkTransposition(correctedWords);
+    // check if the user forgot to add a space
+    checkMissingSpace(correctedWords);
+
+    
+}
+
 int main() {
     HashTable* hashTable = new HashTable(109582, "dictionary.txt");
     cout << hashTable->size();
     string userInput;
+
     while (userInput != ".") {
+        // Prompt user to enter a word
         cout << "Please enter a word (type a single period '.' to terminate): ";
-        cin >> userInput;
+        cin >> userInput;       // save the word to userInput
+        if (hashTable.contains(userInput)) {
+            cout << '*';        // founded the word in hash table, it is acceptable
+        }
+        else {
+            // the word is not found, correcting..
+            correction(hashTable);
+        }
     }
     
-
+    // deallocate the hashTable
     delete hashTable;
     return 0;
 }
