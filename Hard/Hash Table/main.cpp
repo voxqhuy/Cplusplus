@@ -57,8 +57,8 @@ void checkOmission(string userInput, HashTable* hashTable, priority_queue<string
     // If any match a word in the hash table, push into the queue for printing later
     for (size_t i = 0; i <= userInput.length(); i++) {
         for (char j = 'a'; j <= 'z'; j++) {
-            string testingWord = userInput.insert(i, string(1, j));        // FIXME: j doesn't work, has to convert j to string??
-            if (hashTable->contains(testingWord)) {
+            string testingWord = userInput;     // make a copy of userInput to test 
+            if (hashTable->contains(testingWord.insert(i, string(1, j)))) { // FIXME: j doesn't work, has to convert j to string??
                 correctedWords.push(testingWord);
             }
         }
@@ -69,10 +69,9 @@ void checkOmission(string userInput, HashTable* hashTable, priority_queue<string
 void checkExtra(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {
     // Try removing a single letter from the word
     // If any match a word in the hash table, push into the queue for printing later
-    // StringBuilder testingWord = new StringBuilder(userInput);
     for (size_t i = 0; i < userInput.length(); i++) {
-        string testingWord = userInput.erase(i, 1);
-        if (hashTable->contains(testingWord)) {
+        string testingWord = userInput;     
+        if (hashTable->contains(testingWord.erase(i, 1))) {
             correctedWords.push(testingWord);
         }
     }
@@ -80,7 +79,16 @@ void checkExtra(string userInput, HashTable* hashTable, priority_queue<string>& 
 
 // checking for a typo
 void checkTypo(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {
-
+    // Try replacing an existing letter in the word with some other letter
+    // If any match a word in the hash table, push into the queue for printing later
+    for (size_t i = 0; i < userInput.length(); i++) {
+        for (char j = 'a'; j <= 'z'; j++) {
+            string testingWord = userInput;     // make a copy of userInput to test 
+            if (hashTable->contains(testingWord.replace(i, 1, string(1, j)))) { // FIXME: j doesn't work, has to convert j to string??
+                correctedWords.push(testingWord);
+            }
+        }
+    }
 }
 
 // checking for a transposition
