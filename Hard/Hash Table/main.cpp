@@ -8,6 +8,7 @@
 #include <iostream>     // std::cout, std::fixed
 #include <vector>       // std::vector
 #include <string>
+#include <queue>        // std::priority_queue
 using namespace std;
 
 class HashTable {
@@ -50,50 +51,50 @@ public:
 };
 
 // checking for an omission
-void checkOmission(HashTable& hashtable) {      // this function is changing hashtable
+void checkOmission(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {      // this function is changing hashtable
 
 }
 
 // checking for an extra letter
-checkExtra(HashTable& hashtable) {
+void checkExtra(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {
 
 }
 
 // checking for a typo
-checkTypo(HashTable& hashtable) {
+void checkTypo(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {
 
 }
 
 // checking for a transposition
-checkTransposition(HashTable& hashtable) {
+void checkTransposition(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {
 
 }
 
 // checking for a missing space
-checkMissingSpace(HashTable& hashtable) {
+void checkMissingSpace(string userInput, HashTable* hashTable, priority_queue<string>& correctedWords) {
 
 }
 
-void correction(HashTable hashTable) {
+void correction(string userInput, HashTable* hashTable) {
     // Make an empty priority queue
     priority_queue<string> correctedWords;
     // check if the user omitted a letter
-    checkOmission(correctedWords);
+    checkOmission(userInput, hashTable, correctedWords);
     // check if the user added an extraneous letter
-    checkExtra(correctedWords);
+    checkExtra(userInput, hashTable, correctedWords);
     // check if the user mistyped a letter
-    checkTypo(correctedWords);
+    checkTypo(userInput, hashTable, correctedWords);
     // check if the user tranposed 2 adjacent letter
-    checkTransposition(correctedWords);
+    checkTransposition(userInput, hashTable, correctedWords);
     // check if the user forgot to add a space
-    checkMissingSpace(correctedWords);
+    checkMissingSpace(userInput, hashTable, correctedWords);
 
     // print out corrected words in alphabetic order, if there's none, print ???
-    if (correctedWords.empty()) {
+    if (correctedWords.empty()) {   // found none
         cout << "???";
     } else {
         while (!correctedWords.empty()) {
-            cout << correctedWords.top();
+            cout << correctedWords.top() << "\n";
             correctedWords.pop();
         }
     }
@@ -107,13 +108,13 @@ int main() {
     while (userInput != ".") {
         // Prompt user to enter a word
         cout << "Please enter a word (type a single period '.' to terminate): ";
-        cin >> userInput;       // save the word to userInput
-        if (hashTable.contains(userInput)) {
-            cout << '*';        // founded the word in hash table, it is acceptable
+        cin >> userInput;           // save the word to userInput
+        if (hashTable->contains(userInput)) {
+            cout << '*';            // founded the word in hash table, it is acceptable
         }
         else {
             // the word is not found, correcting..
-            correction(hashTable);
+            correction(userInput, hashTable);
         }
     }
     
