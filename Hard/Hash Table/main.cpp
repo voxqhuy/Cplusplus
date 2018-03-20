@@ -40,16 +40,17 @@ public:
     // returns true if the hash table contains a given string
     // otherwise, the method returns false if the string is not present
     bool contains() {
-
+        return false;
     }
 
     // returns the total number of strings in the hash table
     int size() {
         return mTableSize;
     }
-}
+};
 
 int main() {
-    HashTable hashTable = new HashTable(109582, )
+    HashTable* hashTable = new HashTable(109582, "dictionary.txt");
+    cout << hashTable->size();
     return 0;
 }
