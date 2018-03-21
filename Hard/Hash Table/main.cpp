@@ -54,7 +54,7 @@ public:
 
         // initialize all nodes as null
         for (unsigned i = 0; i < tableSize; i++) 
-            nodesArray[i] = NULL;
+            nodesArray[i] = nullptr;
     }
 
     // hash function maps a string to an index within the table
@@ -78,12 +78,12 @@ public:
     // otherwise, it should return false if the word already is present in the table
     bool insert(string str) {
         unsigned location = hash(str); 
-        if(nodesArray[location] == NULL) {
+        // the pointer at the position
+        HashNode* ptr = nodesArray[location];
+        if(ptr == nullptr) {
             // the position is empty, create a note
-            nodesArray[location]->setString(str);
+            ptr->setString(str);
         } else {        // the position is non empty
-            // the pointer at the position
-            HashNode* ptr = nodesArray[location];
             if (ptr->getString() == str) 
                 return false;       // the word already is present
             // Create a new node to add
@@ -110,7 +110,16 @@ public:
 
     // returns true if the hash table contains a given string
     // otherwise, the method returns false if the string is not present
-    bool contains(string str) {
+    bool contains(string str) {     // the position is non empty
+        unsigned location = hash(str); 
+        // the pointer at the position
+        HashNode* ptr = nodesArray[location];
+        while(ptr != nullptr) {
+            if (ptr->getString() == str) 
+                return true;       // the word already is present
+            // loop to the end of the list at the position
+            ptr = ptr->getNext();
+        }
         return false;
     }
 
