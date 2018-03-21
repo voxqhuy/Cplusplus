@@ -39,16 +39,16 @@ public:
 // HashTable class
 class HashTable {
 private:
-    // hash nodes array
-    HashNode **nodesArray;
-    // hash table size
-    unsigned mTableSize;
-    string mFileName;
+    HashNode **nodesArray;      // hash nodes array
+    unsigned tableSize;         // hash table size
+    unsigned numElement;        // number of elements
+    string fileName;
 public:
     // Constructor
     HashTable (unsigned tableSize, string fileName) {
-        this->mTableSize = tableSize;
-        this->mFileName = fileName;
+        this->tableSize = tableSize;
+        this->fileName = fileName;
+        numElement = 0;         // Intial size = 0
         // Initialize the size of hash table
         nodesArray = new HashNode*[tableSize];
 
@@ -70,7 +70,7 @@ public:
             hash ^= (str[i]);
         }
         // return the index the string is mapping to
-        return hash % mTableSize;
+        return hash % tableSize;
     }
 
     // insert method inserts a string into the hash table
@@ -124,8 +124,8 @@ public:
     }
 
     // returns the total number of strings in the hash table
-    int size() {
-        return mTableSize;
+    unsigned size() {
+        return numElement;
     }
 };
 
