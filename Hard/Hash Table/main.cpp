@@ -15,24 +15,32 @@ using namespace std;
 // Each Node in HashTable
 class HashNode {
 private:
-    int mKey;
-    string mValue;
+    string str;
+    HashNode* next = nullptr;
 public:
-    // Constructor
-    HashNode(int key, string value): mKey(key), mValue(value) {}
-    int getKey() {
-        return key;
+//     // Constructor
+//     HashNode(int key, string value): mKey(key), mValue(value) {
+
+//     }
+    string getString() {
+        return str;
     }
-    string getValue() {
-        return value;
+    HashNode* getNext() {
+        return next;
     }
-}
+    void setString(string str) {
+        this->str = str;
+    }
+    void setNext(HashNode* next) {
+        this->next = next;
+    }
+};
 
 // HashTable class
 class HashTable {
 private:
     // hash nodes array
-    HashNode<int, string> **nodesArray;
+    HashNode **nodesArray;
     // hash table size
     unsigned mTableSize;
     string mFileName;
@@ -42,23 +50,55 @@ public:
         this->mTableSize = tableSize;
         this->mFileName = fileName;
         // Initialize the size of hash table
-        nodesArray = new HashNode<int, string>*[tableSize];
+        nodesArray = new HashNode*[tableSize];
 
         // initialize all nodes as null
         for (unsigned i = 0; i < tableSize; i++) 
-            nodesArray[i] = null;
+            nodesArray[i] = NULL;
     }
 
     // hash function maps a string to an index within the table
-    void hash() {
+    // Using Fowler-Noll-Vo Hash (FNV1a)
+    // based on:https://www.programmingalgorithms.com/algorithm/fnv-hash?lang=C%2B%2B
+    unsigned hash(string str) {
+        const unsigned fnv_prime = 0x811C9DC5;
+        unsigned hash = 0;      // hashing index
 
+        for (unsigned i = 0; i < str.length(); i++)
+        {
+            hash *= fnv_prime;
+            hash ^= (str[i]);
+        }
+        // return the index the string is mapping to
+        return hash % mTableSize;
     }
 
     // insert method inserts a string into the hash table
     // return true if it successfully inserts the word into the table
     // otherwise, it should return false if the word already is present in the table
-    bool insert() {
-        return false;
+    bool insert(string str) {
+        unsigned location = hash(str); 
+        if(nodesArray[location] == NULL) {
+            // the position is empty, create a note
+            nodesArray[location].setString(str);
+        } else {        // the position is non empty
+            // the pointer at the position
+            HashNode* ptr = nodesArray[location];
+            if (ptr.getString() == str) 
+                retrun false;       // the word already is present
+            // Create a new node to add
+            HashNode* hashNode = new HashNode;
+            hashNode->setString(str);
+            // loop to the end of the list at the position
+            while (ptr->next != nullptr) {
+                ptr = ptr->next;
+                if (ptr.getString() == str) 
+                    retrun false;   // the word already is present 
+            }
+            // stick the new node to the position
+            ptr->next = hashNode;
+        }
+        return true;
     }
 
     // remove method removes a string from the hash table 
