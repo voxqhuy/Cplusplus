@@ -80,23 +80,23 @@ public:
         unsigned location = hash(str); 
         if(nodesArray[location] == NULL) {
             // the position is empty, create a note
-            nodesArray[location].setString(str);
+            nodesArray[location]->setString(str);
         } else {        // the position is non empty
             // the pointer at the position
             HashNode* ptr = nodesArray[location];
-            if (ptr.getString() == str) 
-                retrun false;       // the word already is present
+            if (ptr->getString() == str) 
+                return false;       // the word already is present
             // Create a new node to add
             HashNode* hashNode = new HashNode;
             hashNode->setString(str);
             // loop to the end of the list at the position
-            while (ptr->next != nullptr) {
-                ptr = ptr->next;
-                if (ptr.getString() == str) 
-                    retrun false;   // the word already is present 
+            while (ptr->getNext() != nullptr) {
+                ptr = ptr->getNext();
+                if (ptr->getString() == str) 
+                    return false;   // the word already is present 
             }
             // stick the new node to the position
-            ptr->next = hashNode;
+            ptr->setNext(hashNode);
         }
         return true;
     }
