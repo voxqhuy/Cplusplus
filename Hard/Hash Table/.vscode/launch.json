@@ -8,7 +8,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "D:/iRoommm/Web dev/Github copies/C-/Huffman Tree/a.exe",
+            "program": "D:/iRoommm/Web dev/Github copies/C-/Hard/Hash Table/a.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

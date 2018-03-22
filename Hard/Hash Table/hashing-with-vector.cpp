@@ -44,12 +44,10 @@ private:
     vector<vector<HashNode>> nodesTable;      // hash nodes array
     unsigned tableSize;         // hash table size
     unsigned numElement;        // number of elements
-    string fileName;
 public:
     /***    CONSTRUCTOR     ***/
     HashTable (unsigned tableSize, string fileName) {
         this->tableSize = tableSize;
-        this->fileName = fileName;
         numElement = 0;         // Intial size = 0
 
         // Initialize the size of hash table
