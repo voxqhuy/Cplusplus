@@ -40,8 +40,8 @@ using namespace std;
 // Ordering a to z
 
 int main () {
-  vector<vector<string>> a(10);
-  if (a[0].empty())
-    cout << "ga";
+  vector<string> a;
+  a.push_back("a");
+  cout << a[0];
   return 0;
 }

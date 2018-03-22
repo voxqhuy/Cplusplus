@@ -38,7 +38,7 @@ public:
 // HashTable class
 class HashTable {
 private:
-    HashNode **nodesArray;      // hash nodes array
+    vector<vector<HashNode>> **nodesTable;      // hash nodes array
     unsigned tableSize;         // hash table size
     unsigned numElement;        // number of elements
     string fileName;
@@ -50,11 +50,7 @@ public:
         numElement = 0;         // Intial size = 0
 
         // Initialize the size of hash table
-        nodesArray = new HashNode*[tableSize];
-        // initialize all nodes as null
-        for (unsigned i = 0; i < tableSize; i++) 
-            nodesArray[i] = nullptr;
-        
+        nodesTable = new vector<vector<HashNode>> (tableSize);
     }
 
     // hash function maps a string to an index within the table
@@ -79,18 +75,18 @@ public:
     bool insert(string word) {
         // the index of the word in the hash table
         unsigned index = hash(word); 
-        // the head at the index
-        HashNode* ptr = nodesArray[index];
-        // loop to the end of the list at the index
-        while (ptr != nullptr) {
-            if (ptr->getData() == word) 
-                return false;       // the word already is present 
-            ptr = ptr->getNext();
+        // the chain at that index
+        vector<HashNode> chain = nodesTable[index];
+        // check if the word is already present
+        if (!chain.empty()) {       // the chain is not empty
+            for (auto &iterator : chain) {
+                if (iterator->getData() == word)
+                    return false;   // the word is already present
+            }
         }
         // HashNode* hashNode = new HashNode;       // FIXME: Do I need this or delete?
         // hashNode->setData(str);
-        ptr = new HashNode(word);   // add a new node
-
+        chain.push_back(new HashNode(word));          // add a new node
         // successfully inserted the word
         numElement++;               // increment the size
         return true;
@@ -121,23 +117,24 @@ public:
             prev = ptr;
             ptr = ptr->getNext();
         }
-        return false;               // the word is not found
+        return false;                       // the word is not found
     }
 
-    // returns true if the hash table contains a given string
-    // otherwise, the method returns false if the string is not present
+    // returns true if the hash table contains a given word
+    // otherwise, the method returns false if the word is not present
     bool contains(string word) { 
         // the index of the word in the hash table
         unsigned index = hash(word); 
-        // the head at the index
-        HashNode* ptr = nodesArray[index];
-        // loop through the list at the index
-        while(ptr != nullptr) {
-            if (ptr->getData() == word) 
-                return true;        // found the word
-            ptr = ptr->getNext();
+        // the chain at that index
+        vector<HashNode> chain = nodesTable[index];
+        // check if the word is present
+        if (!chain.empty()) {               // the chain is not empty
+            for (auto &iterator : chain) {
+                if (iterator->getData() == word)
+                    return true;            // the word is present
+            }
         }
-        return false;               // the word is not found
+        return false;                       // the word is not present
     }
 
     // returns the total number of strings in the hash table
