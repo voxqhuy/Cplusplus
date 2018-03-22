@@ -15,21 +15,19 @@ using namespace std;
 // Each Node in HashTable
 class HashNode {
 private:
-    string str;
+    string data;
     HashNode* next = nullptr;
 public:
-//     // Constructor
-//     HashNode(int key, string value): mKey(key), mValue(value) {
-
-//     }
-    string getString() {
-        return str;
+    // Constructor
+    HashNode(string word): data(word) {}
+    string getData() {
+        return data;
     }
     HashNode* getNext() {
         return next;
     }
-    void setString(string str) {
-        this->str = str;
+    void setData(string word) {
+        this->data = word;
     }
     void setNext(HashNode* next) {
         this->next = next;
@@ -49,9 +47,9 @@ public:
         this->tableSize = tableSize;
         this->fileName = fileName;
         numElement = 0;         // Intial size = 0
+
         // Initialize the size of hash table
         nodesArray = new HashNode*[tableSize];
-
         // initialize all nodes as null
         for (unsigned i = 0; i < tableSize; i++) 
             nodesArray[i] = nullptr;
@@ -60,14 +58,14 @@ public:
     // hash function maps a string to an index within the table
     // Using Fowler-Noll-Vo Hash (FNV1a)
     // based on:https://www.programmingalgorithms.com/algorithm/fnv-hash?lang=C%2B%2B
-    unsigned hash(string str) {
+    unsigned hash(string word) {
         const unsigned fnv_prime = 0x811C9DC5;
         unsigned hash = 0;      // hashing index
 
-        for (unsigned i = 0; i < str.length(); i++)
+        for (unsigned i = 0; i < word.length(); i++)
         {
             hash *= fnv_prime;
-            hash ^= (str[i]);
+            hash ^= (word[i]);
         }
         // return the index the string is mapping to
         return hash % tableSize;
@@ -76,28 +74,23 @@ public:
     // insert method inserts a string into the hash table
     // return true if it successfully inserts the word into the table
     // otherwise, it should return false if the word already is present in the table
-    bool insert(string str) {
-        unsigned location = hash(str); 
-        // the pointer at the position
+    bool insert(string word) {
+        unsigned location = hash(word); 
+        // the head of the position
         HashNode* ptr = nodesArray[location];
-        if(ptr == nullptr) {
-            // the position is empty, create a note
-            ptr->setString(str);
-        } else {        // the position is non empty
-            if (ptr->getString() == str) 
-                return false;       // the word already is present
-            // Create a new node to add
-            HashNode* hashNode = new HashNode;
-            hashNode->setString(str);
-            // loop to the end of the list at the position
-            while (ptr->getNext() != nullptr) {
-                ptr = ptr->getNext();
-                if (ptr->getString() == str) 
-                    return false;   // the word already is present 
-            }
-            // stick the new node to the position
-            ptr->setNext(hashNode);
+        // loop to the end of the list at the position
+        while (ptr != nullptr) {
+            if (ptr->getData() == word) 
+                return false;   // the word already is present 
+            ptr = ptr->getNext();
         }
+        // HashNode* hashNode = new HashNode;       // FIXME: Do I need this or delete?
+        // hashNode->setData(str);
+        // add a new node
+        ptr = new HashNode(word);
+        
+        // successfully inserts the word
+        numElement++;       // increment the size
         return true;
     }
 
@@ -110,12 +103,12 @@ public:
 
     // returns true if the hash table contains a given string
     // otherwise, the method returns false if the string is not present
-    bool contains(string str) {     // the position is non empty
-        unsigned location = hash(str); 
-        // the pointer at the position
+    bool contains(string word) {     // the position is non empty
+        unsigned location = hash(word); 
+        // the head at the position
         HashNode* ptr = nodesArray[location];
         while(ptr != nullptr) {
-            if (ptr->getString() == str) 
+            if (ptr->getData() == word) 
                 return true;       // the word already is present
             // loop to the end of the list at the position
             ptr = ptr->getNext();
@@ -133,9 +126,9 @@ public:
 class CompareAlphabets
 {
 public:
-    bool operator()(string str1, string str2) {
+    bool operator()(string word1, string word2) {
         // return a is ordered after z
-        return str1 > str2; 
+        return word1 > word2; 
     }
 };
 
