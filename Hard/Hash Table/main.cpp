@@ -75,22 +75,22 @@ public:
     // return true if it successfully inserts the word into the table
     // otherwise, it should return false if the word already is present in the table
     bool insert(string word) {
-        unsigned location = hash(word); 
-        // the head of the position
-        HashNode* ptr = nodesArray[location];
-        // loop to the end of the list at the position
+        // the index of the word in the hash table
+        unsigned index = hash(word); 
+        // the head at the index
+        HashNode* ptr = nodesArray[index];
+        // loop to the end of the list at the index
         while (ptr != nullptr) {
             if (ptr->getData() == word) 
-                return false;   // the word already is present 
+                return false;       // the word already is present 
             ptr = ptr->getNext();
         }
         // HashNode* hashNode = new HashNode;       // FIXME: Do I need this or delete?
         // hashNode->setData(str);
-        // add a new node
-        ptr = new HashNode(word);
-        
-        // successfully inserts the word
-        numElement++;       // increment the size
+        ptr = new HashNode(word);   // add a new node
+
+        // successfully inserted the word
+        numElement++;               // increment the size
         return true;
     }
 
@@ -98,22 +98,26 @@ public:
     // returns true if it removes the word
     // otherwise, it returns false if the word to remove is not in the hash table
     bool remove() {
-        return false;
+
+        // successfully found and removed the word
+        numElement--;
+        return true;
     }
 
     // returns true if the hash table contains a given string
     // otherwise, the method returns false if the string is not present
-    bool contains(string word) {     // the position is non empty
-        unsigned location = hash(word); 
-        // the head at the position
-        HashNode* ptr = nodesArray[location];
+    bool contains(string word) { 
+        // the index of the word in the hash table
+        unsigned index = hash(word); 
+        // the head at the index
+        HashNode* ptr = nodesArray[index];
+        // loop through the list at the index
         while(ptr != nullptr) {
             if (ptr->getData() == word) 
-                return true;       // the word already is present
-            // loop to the end of the list at the position
+                return true;        // found the word
             ptr = ptr->getNext();
         }
-        return false;
+        return false;               // the word is not found
     }
 
     // returns the total number of strings in the hash table
