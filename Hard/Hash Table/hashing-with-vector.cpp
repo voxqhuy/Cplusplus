@@ -54,6 +54,7 @@ public:
         // initialize all nodes as null
         for (unsigned i = 0; i < tableSize; i++) 
             nodesArray[i] = nullptr;
+        
     }
 
     // hash function maps a string to an index within the table

@@ -10,6 +10,7 @@
 #include <string>
 #include <queue>        // std::priority_queue
 #include <cstddef>      // std::size_t
+#include <stdexcept>      // std::out_of_range
 using namespace std;
 
 // // checking for an omission
@@ -37,26 +38,10 @@ using namespace std;
 // }
 
 // Ordering a to z
-class CompareAlphabets
-{
-public:
-    bool operator()(string str1, string str2) {
-        // return A is ordered after Z
-        return str1 > str2; 
-    }
-};
 
-int main() {
-    priority_queue<string, std::vector<string>, CompareAlphabets> correctedWords;
-    correctedWords.push("abc");
-    correctedWords.push("z bc");
-    correctedWords.push("cba");
-    correctedWords.push("a");
-    correctedWords.push("ccc");
-    correctedWords.push("aaa");
-    while (!correctedWords.empty()) {
-            cout << correctedWords.top() << "\n";
-            correctedWords.pop();
-    }
-    return 0;
+int main () {
+  vector<vector<string>> a(10);
+  if (a[0].empty())
+    cout << "ga";
+  return 0;
 }
