@@ -5,6 +5,7 @@
 //  Date last modified: March 27, 2018
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment. 
 
+#include <fstream>
 #include <iostream>     // std::cout, std::fixed
 #include <vector>       // std::vector
 #include <string>
@@ -40,8 +41,20 @@ using namespace std;
 // Ordering a to z
 
 int main () {
-  vector<vector<string>> a;
-  a.reserve(5);
-  cout << a[1].empty();
+  string word;
+  string textfile = "dictionary.txt";
+  ifstream inFile;
+  inFile.open(textfile);
+  // Check if the text file could be opened
+  if (!inFile) {
+      cout  << "Unable to open file declaration.text";
+      exit(1);                // Unable to open the file, exit the function
+  }
+  inFile >> word;
+  inFile >> word;
+  cout << word.length();
+  // while (inFile >> word) {
+  //       cout << word << "\n";             // printing out the texts
+  // }
   return 0;
 }

@@ -5,9 +5,10 @@
 //  Date last modified: March 27, 2018
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment. 
 
+#include <fstream>      // std::ifstream
 #include <iostream>     // std::cout, std::fixed
 #include <vector>       // std::vector
-#include <string>
+#include <string>       // std::string
 #include <queue>        // std::priority_queue
 #include <cstddef>      // std::size_t
 using namespace std;
@@ -53,6 +54,18 @@ public:
 
         // Initialize the size of hash table
         nodesTable.reserve(tableSize);
+
+        string word;            // each word in the text file
+        ifstream inFile;        
+        inFile.open(fileName);  // reading the text
+        // Check if the text file could be opened
+        if (!inFile) {
+            cout  << "Unable to open file " + fileName;
+            exit(1);            // Unable to open the file, exit the function
+        }
+        while (inFile >> word) {
+            bool didInsertSuccessfully = insert(word);      // fill the hash table with words
+        }
     }
 
     // hash function maps a string to an index within the table

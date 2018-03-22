@@ -1,25 +1,21 @@
-
 //  Name: Vo Huy
-//  Assignment number: 4
 //  Assignment: Huffman Coding Tree
 //  File name: main.cpp
-//  Date last modified: March 14, 2018
+//  Date last modified: March 22, 2018
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment. 
 
 /* NOTICES 
-    1. These classes are based on class 318 lecture at SAU by Dr. Halterman
-
-    2.virtual function:  To implement polymorphism 
+    1.virtual function:  To implement polymorphism 
     If the superclass pointer is aiming at a subclass objects, and invoke a virtual function
     that is overridden by the subclass, the subclass version will be invoked, instead of the superclass version
     https://www.ntu.edu.sg/home/ehchua/programming/cpp/cp6_Inheritance.html
     
-    3.Customed strict weak ordering
+    2.Customed strict weak ordering
     https://stackoverflow.com/a/19535699/8969722
 
-    4."= 0" : this is a pure method https://stackoverflow.com/a/21187983/8969722
+    3."= 0" : this is a pure method https://stackoverflow.com/a/21187983/8969722
 
-    5. override: a virtual function overrides another virtual function
+    4. override: a virtual function overrides another virtual function
 	http://en.cppreference.com/w/cpp/language/override
 */
 
@@ -239,4 +235,5 @@ int main() {
     root->encode(sortedEncodeds);
     // print encoded bits with each character
     printCodes(sortedEncodeds);
+    return 0;
 }
