@@ -18,11 +18,12 @@ private:
     string data;
     HashNode* next = nullptr;
 public:
-    // Constructor
+    /***    CONSTRUCTOR     ***/
     HashNode(string word): data(word) {}
     string getData() {
         return data;
     }
+    // getters and setters
     HashNode* getNext() {
         return next;
     }
@@ -42,7 +43,7 @@ private:
     unsigned numElement;        // number of elements
     string fileName;
 public:
-    // Constructor
+    /***    CONSTRUCTOR     ***/
     HashTable (unsigned tableSize, string fileName) {
         this->tableSize = tableSize;
         this->fileName = fileName;
@@ -97,11 +98,29 @@ public:
     // remove method removes a string from the hash table 
     // returns true if it removes the word
     // otherwise, it returns false if the word to remove is not in the hash table
-    bool remove() {
+    bool remove(string word) {
+        // the index of the word in the hash table
+        unsigned index = hash(word); 
+        // the head at the index
+        HashNode* ptr = nodesArray[index];
+        // the node previous to the ptr
+        HashNode* prev = nullptr;
+        // loop to the end of the list at the index
+        while (ptr != nullptr) {
+            if (ptr->getData() == word) {   // found the node
+                if (prev != nullptr) {
+                    prev->setNext(ptr->getNext());   // rechain the list
+                }
+                delete ptr;                 // remove the node
 
-        // successfully found and removed the word
-        numElement--;
-        return true;
+                // successfully found and removed the word
+                numElement--;
+                return true;
+            }
+            prev = ptr;
+            ptr = ptr->getNext();
+        }
+        return false;               // the word is not found
     }
 
     // returns true if the hash table contains a given string
