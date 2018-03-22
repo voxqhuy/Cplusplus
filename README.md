@@ -8,8 +8,9 @@ The order is based on the complexity of algorithms, from my own experience and w
 Program Descriptions:
 
 B. **_Medium_**
+
 ``` diff
-+ 1. Linked List:
++ 1. LINKED LIST:
 ```
 An implementation of a generic singly linked list. Example functions included are:
   + **operator[]**: the indexing operator allows a client to access an element by its offset from the beginning of the list. As with std::vectors and arrays, the method's behavior is undefined if the client provides an index out of range (this means you need not defend against such attempts). Your method necessarily will be less efficient than **std::vector::operator[]** because linked lists do not support random access.
@@ -17,8 +18,9 @@ An implementation of a generic singly linked list. Example functions included ar
   + **member**: accepts an argument of the same type as the elements in the list. The function returns *true* if the argument appears in the list; otherwise, the function returns *false*.
   + **operator==**: returns *true* if a list passed as a parameter contains the same elements in the same order as this list; otherwise, the method returns *false*. This method should not copy the elements in the list passed to it, and it should not disturb the contents of either list.
   + **unique**: returns *true* if all of the elements of the list are unique; that is, the list contains no duplicate elements. If at least one of the elements in the list appears more than one time, the method should return *false*. This method should not disturb the contents of the list.
+  
 ``` diff
-+ 2. Binary Tree Builder:
++ 2. BINARY TREE:
 ```
 Building a Binary Tree from Traversals
 
@@ -51,8 +53,9 @@ The program will build
 ```
 
 C. **_Hard_**
+
 ``` diff
-+ 1. **Huffman Tree**:
+- 1. HUFFMAN TREE:
 ```
 Read a text file (the Declaration of Independence in this case), count the frequencies of each charater (uppercased), build a Huffman tree out of the frequencies (%), and encode to bit strings.
 
@@ -169,6 +172,10 @@ W: 011110
 X: 011111000
 Y: 000110
 Z: 0111110010
+```
+
+``` diff
+- 2. HASHING TABLE:
 ```
 
 March 5 2018.
