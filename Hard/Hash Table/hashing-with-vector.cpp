@@ -20,6 +20,8 @@ private:
 public:
     /***    CONSTRUCTOR     ***/
     HashNode(string word): data(word) {}
+    HashNode() {}
+
     string getData() {
         return data;
     }
@@ -38,7 +40,7 @@ public:
 // HashTable class
 class HashTable {
 private:
-    vector<vector<HashNode>> **nodesTable;      // hash nodes array
+    vector<vector<HashNode>> nodesTable;      // hash nodes array
     unsigned tableSize;         // hash table size
     unsigned numElement;        // number of elements
     string fileName;
@@ -50,7 +52,7 @@ public:
         numElement = 0;         // Intial size = 0
 
         // Initialize the size of hash table
-        nodesTable = new vector<vector<HashNode>> (tableSize);
+        nodesTable.reserve(tableSize);
     }
 
     // hash function maps a string to an index within the table
@@ -79,14 +81,14 @@ public:
         vector<HashNode> chain = nodesTable[index];
         // check if the word is already present
         if (!chain.empty()) {       // the chain is not empty
-            for (auto &iterator : chain) {
-                if (iterator->getData() == word)
+            for (auto &it : chain) {
+                if (it.getData() == word)
                     return false;   // the word is already present
             }
         }
-        // HashNode* hashNode = new HashNode;       // FIXME: Do I need this or delete?
-        // hashNode->setData(str);
-        chain.push_back(new HashNode(word));          // add a new node
+        HashNode hashNode;       // FIXME: Do I need this or delete?
+        hashNode.setData(word);
+        chain.push_back(hashNode);                    // add a new node
         // successfully inserted the word
         numElement++;               // increment the size
         return true;
@@ -98,26 +100,19 @@ public:
     bool remove(string word) {
         // the index of the word in the hash table
         unsigned index = hash(word); 
-        // the head at the index
-        HashNode* ptr = nodesArray[index];
-        // the node previous to the ptr
-        HashNode* prev = nullptr;
-        // loop to the end of the list at the index
-        while (ptr != nullptr) {
-            if (ptr->getData() == word) {   // found the node
-                if (prev != nullptr) {
-                    prev->setNext(ptr->getNext());   // rechain the list
+        // the chain at that index
+        vector<HashNode> chain = nodesTable[index];
+        // check if the word is present
+        if (!chain.empty()) {               // the chain is not empty
+            for (auto it = chain.begin(); it != chain.end(); it++) {
+                if (it->getData() == word) {
+                    it = chain.erase(it);
+                    numElement--;
+                    return true;            // successfully found and removed the word
                 }
-                delete ptr;                 // remove the node
-
-                // successfully found and removed the word
-                numElement--;
-                return true;
             }
-            prev = ptr;
-            ptr = ptr->getNext();
         }
-        return false;                       // the word is not found
+        return false;                       // the word is not present
     }
 
     // returns true if the hash table contains a given word
@@ -129,8 +124,8 @@ public:
         vector<HashNode> chain = nodesTable[index];
         // check if the word is present
         if (!chain.empty()) {               // the chain is not empty
-            for (auto &iterator : chain) {
-                if (iterator->getData() == word)
+            for (auto &it : chain) {
+                if (it.getData() == word)
                     return true;            // the word is present
             }
         }
