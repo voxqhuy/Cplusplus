@@ -25,15 +25,13 @@ public:
         this->tableSize = tableSize;
         numElement = 0;         // Intial number of elements = 0
 
+        ifstream file(fileName);// reading the text   
         string word;            // each word in the text file
-        ifstream inFile;        
-        inFile.open(fileName);  // reading the text
-        // Check if the text file could be opened
-        if (!inFile) {
+        if (!file) {            // Check if the text file could be opened
             cout  << "Unable to open file " + fileName;
             exit(1);            // Unable to open the file, exit the function
         }
-        while (inFile >> word) {
+        while (getline(file, word)) {
             bool didInsertSuccessfully = insert(word);      // fill the hash table with words
         }
     }
@@ -227,7 +225,7 @@ void suggest(string userInput, const HashTable& hashTable) {
 
     // print out suggested words in alphabetic order, if there's none, print ???
     if (suggestedWords.empty()) {   // found none
-        cout << "??? (Unable to provide a suggestion)";
+        cout << "??? (Unable to provide a suggestion)\n";
     } else {
         cout << "The entered word is non-existent. Suggestions:\n";
         while (!suggestedWords.empty()) {
@@ -245,7 +243,7 @@ int main() {
     while (userInput != ".") {
         // Prompt user to enter a word
         cout << "\nPlease enter a word (type a single period '.' to terminate): ";
-        cin >> userInput;           // save the word to userInput
+        getline(cin, userInput);    // save the word to userInput
         if (hashTable.contain(userInput)) {
             cout << "* (The word is acceptable)\n";     // founded the word in hash table, it is acceptable
         }
