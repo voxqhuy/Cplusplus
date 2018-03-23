@@ -31,7 +31,7 @@ public:
             cout  << "Unable to open file " + fileName;
             exit(1);            // Unable to open the file, exit the function
         }
-        while (getline(file, word)) {
+        while (file >> word) {
             bool didInsertSuccessfully = insert(word);      // fill the hash table with words
         }
     }
@@ -75,7 +75,7 @@ public:
                     return false;   // the word is already present
             }
         }
-        cout << word << "\n";
+        // cout << word << "\n";
 
         chain.push_back(word);      // add a new node
         // successfully inserted the word
@@ -243,7 +243,7 @@ int main() {
     while (userInput != ".") {
         // Prompt user to enter a word
         cout << "\nPlease enter a word (type a single period '.' to terminate): ";
-        getline(cin, userInput);    // save the word to userInput
+        cin >> userInput;           // save the word to userInput
         if (hashTable.contain(userInput)) {
             cout << "* (The word is acceptable)\n";     // founded the word in hash table, it is acceptable
         }
