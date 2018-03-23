@@ -11,13 +11,14 @@
 #include <string>       // std::string
 #include <queue>        // std::priority_queue
 #include <cstddef>      // std::size_t
+#include <algorithm>
 using namespace std;
 
 // Each Node in HashTable
 class HashNode {
 private:
     string data;
-    HashNode* next = nullptr;
+    // HashNode* next = nullptr;
 public:
     /***    CONSTRUCTOR     ***/
     HashNode(string word): data(word) {}
@@ -27,15 +28,15 @@ public:
         return data;
     }
     // getters and setters
-    HashNode* getNext() {
-        return next;
-    }
+    // HashNode* getNext() {
+    //     return next;
+    // }
     void setData(string word) {
         this->data = word;
     }
-    void setNext(HashNode* next) {
-        this->next = next;
-    }
+    // void setNext(HashNode* next) {
+    //     this->next = next;
+    // }
 };
 
 // HashTable class
@@ -45,13 +46,13 @@ private:
     unsigned tableSize;         // hash table size
     unsigned numElement;        // number of elements
 public:
-    /***    CONSTRUCTOR     ***/
-    HashTable (unsigned tableSize, string fileName) {
+    /***    CONSTRUCTOR    ***/
+    HashTable (unsigned tableSize, string fileName) : nodesTable(tableSize) {
         this->tableSize = tableSize;
         numElement = 0;         // Intial size = 0
 
         // Initialize the size of hash table
-        nodesTable.reserve(tableSize);
+        // nodesTable.reserve(tableSize);
 
         string word;            // each word in the text file
         ifstream inFile;        
@@ -69,7 +70,8 @@ public:
     // hash function maps a string to an index within the table
     // Using Fowler-Noll-Vo Hash (FNV)
     // based on:https://www.programmingalgorithms.com/algorithm/fnv-hash?lang=C%2B%2B
-    unsigned hash(string word) {
+    unsigned hash(string word) const {
+        // return 0;
         const unsigned fnv_prime = 0x811C9DC5;
         unsigned hash = 0;      // hashing index
 
@@ -79,6 +81,14 @@ public:
             hash ^= (word[i]);
         }
         // return the index the string is mapping to
+        // unsigned h = 0, g;
+        // for (const char *p = word.c_str(); *p; p++) {
+        //     h = (h << 4) + (*p);
+        //     if (g = h & 0xf0000000) {
+        //         h ^= g >> 24;
+        //         h ^= g;
+        //     }
+        // }
         return hash % tableSize;
     }
 
@@ -88,20 +98,30 @@ public:
     bool insert(string word) {
         // the index of the word in the hash table
         unsigned index = hash(word); 
+        cout << index << ' ';
         // the chain at that index
-        vector<HashNode> chain = nodesTable[index];
+        vector<HashNode>& chain = nodesTable[index];
         // check if the word is already present
+        cout << "beforeee";
+        cout << '<' << chain.size() << '>' << ' ';
         if (!chain.empty()) {       // the chain is not empty
             for (auto &it : chain) {
                 if (it.getData() == word)
                     return false;   // the word is already present
             }
         }
+        cout << "afterrrr";
         HashNode hashNode;       // FIXME: Do I need this or delete?
         hashNode.setData(word);
         chain.push_back(hashNode);                    // add a new node
+        for_each(
+            begin(chain),
+            end(chain),
+            [](HashNode s) {cout << s.getData() << "\n"; } );
+        
         // successfully inserted the word
         numElement++;               // increment the size
+        // cout << nodesTable[784][0].getData() << "\n"; 
         return true;
     }
 
@@ -112,7 +132,7 @@ public:
         // the index of the word in the hash table
         unsigned index = hash(word); 
         // the chain at that index
-        vector<HashNode> chain = nodesTable[index];
+        vector<HashNode>& chain = nodesTable[index];
         // check if the word is present
         if (!chain.empty()) {               // the chain is not empty
             for (auto it = chain.begin(); it != chain.end(); it++) {
@@ -128,15 +148,15 @@ public:
 
     // returns true if the hash table contains a given word
     // otherwise, the method returns false if the word is not present
-    bool contains(string word) { 
+    bool contains(string word) const { 
         // the index of the word in the hash table
         unsigned index = hash(word); 
         // the chain at that index
         vector<HashNode> chain = nodesTable[index];
         // check if the word is present
         if (!chain.empty()) {               // the chain is not empty
-            for (auto &it : chain) {
-                if (it.getData() == word)
+            for (auto it = chain.begin(); it != chain.end(); it++) {
+                if (it->getData() == word)
                     return true;            // the word is present
             }
         }
@@ -144,7 +164,7 @@ public:
     }
 
     // returns the total number of strings in the hash table
-    unsigned size() {
+    unsigned size() const {
         return numElement;
     }
 };
@@ -160,14 +180,14 @@ public:
 };
 
 // checking for an omission
-void checkOmission(string userInput, HashTable* hashTable, 
+void checkOmission(string userInput, const HashTable& hashTable, 
     priority_queue<string, std::vector<string>, CompareAlphabets>& correctedWords) {  
     // Try adding a single letter at all possible places in the word
     // If any match a word in the hash table, push into the queue for printing later
     for (size_t i = 0; i <= userInput.length(); i++) {
         for (char j = 'a'; j <= 'z'; j++) {
             string testingWord = userInput;     // make a copy of userInput to test 
-            if (hashTable->contains(testingWord.insert(i, string(1, j)))) { // FIXME: j doesn't work, has to convert j to string??
+            if (hashTable.contains(testingWord.insert(i, string(1, j)))) { // FIXME: j doesn't work, has to convert j to string??
                 correctedWords.push(testingWord);
             }
         }
@@ -175,27 +195,27 @@ void checkOmission(string userInput, HashTable* hashTable,
 }
 
 // checking for an extra letter
-void checkExtra(string userInput, HashTable* hashTable, 
+void checkExtra(string userInput, const HashTable& hashTable, 
     priority_queue<string, std::vector<string>, CompareAlphabets>& correctedWords) {
     // Try removing a single letter from the word
     // If any match a word in the hash table, push into the queue for printing later
     for (size_t i = 0; i < userInput.length(); i++) {
         string testingWord = userInput;         // make a copy of userInput to test
-        if (hashTable->contains(testingWord.erase(i, 1))) {
+        if (hashTable.contains(testingWord.erase(i, 1))) {
             correctedWords.push(testingWord);
         }
     }
 }
 
 // checking for a typo
-void checkTypo(string userInput, HashTable* hashTable, 
+void checkTypo(string userInput, const HashTable& hashTable, 
     priority_queue<string, std::vector<string>, CompareAlphabets>& correctedWords) {
     // Try replacing an existing letter in the word with some other letter
     // If any match a word in the hash table, push into the queue for printing later
     for (size_t i = 0; i < userInput.length(); i++) {
         for (char j = 'a'; j <= 'z'; j++) {
             string testingWord = userInput;     // make a copy of userInput to test 
-            if (hashTable->contains(testingWord.replace(i, 1, string(1, j)))) { // FIXME: j doesn't work, has to convert j to string??
+            if (hashTable.contains(testingWord.replace(i, 1, string(1, j)))) { // FIXME: j doesn't work, has to convert j to string??
                 correctedWords.push(testingWord);
             }
         }
@@ -203,34 +223,34 @@ void checkTypo(string userInput, HashTable* hashTable,
 }
 
 // checking for a transposition
-void checkTransposition(string userInput, HashTable* hashTable, 
+void checkTransposition(string userInput, const HashTable& hashTable, 
     priority_queue<string, std::vector<string>, CompareAlphabets>& correctedWords) {
     // Try transposing adjacent letters
     // If any match a word in the hash table, push into the queue for printing later
     for (size_t i = 0; i < userInput.length() - 1; i++) {
         string testingWord = userInput;         // make a copy of userInput to test
         swap(testingWord[i], testingWord[i + 1]);       // swapping 2 adjacent elements
-        if (hashTable->contains(testingWord)) {
+        if (hashTable.contains(testingWord)) {
             correctedWords.push(testingWord);
         }
     }
 }
 
 // checking for a missing space
-void checkMissingSpace(string userInput, HashTable* hashTable, 
+void checkMissingSpace(string userInput, const HashTable& hashTable, 
     priority_queue<string, std::vector<string>, CompareAlphabets>& correctedWords) {
     // Try adding a single space at all possible places in the word
     // If any match a word in the hash table, push into the queue for printing later
     for (size_t i = 1; i < userInput.length(); i++) {
         string testingWord = userInput;         // make a copy of userInput to test 
-        if (hashTable->contains(testingWord.insert(i, string(1, ' ')))) { // FIXME: j doesn't work, has to convert j to string??
+        if (hashTable.contains(testingWord.insert(i, string(1, ' ')))) { // FIXME: j doesn't work, has to convert j to string??
             correctedWords.push(testingWord);
         }
     }
 }
 
 // Attempt to correct the user input
-void correction(string userInput, HashTable* hashTable) {
+void correction(string userInput, const HashTable& hashTable) {
     // Make an empty priority queue
     priority_queue<string, std::vector<string>, CompareAlphabets> correctedWords;
     // Note: The functions below CHANGE correctedWords
@@ -257,15 +277,16 @@ void correction(string userInput, HashTable* hashTable) {
 }
 
 int main() {
-    HashTable* hashTable = new HashTable(109582, "dictionary.txt");
-    cout << hashTable->size();      // For testing. TODO: erase this
+    // HashTable* hashTable = new HashTable(1000, "dictionary.txt");
+    HashTable hashTable{1000, "dictionary.txt"};
+    cout << hashTable.size();      // For testing. TODO: erase this
     string userInput;
 
     while (userInput != ".") {
         // Prompt user to enter a word
         cout << "Please enter a word (type a single period '.' to terminate): ";
         cin >> userInput;           // save the word to userInput
-        if (hashTable->contains(userInput)) {
+        if (hashTable.contains(userInput)) {
             cout << '*';            // founded the word in hash table, it is acceptable
         }
         else {
@@ -274,7 +295,5 @@ int main() {
         }
     }
     
-    // deallocate the hashTable
-    delete hashTable;
     return 0;
 }
