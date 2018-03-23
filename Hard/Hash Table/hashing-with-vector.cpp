@@ -42,21 +42,11 @@ public:
     unsigned hash(string word) const {
         const unsigned fnv_prime = 0x811C9DC5;
         unsigned hash = 0;      // hashing index
-
         for (unsigned i = 0; i < word.length(); i++)
         {
             hash *= fnv_prime;
             hash ^= (word[i]);
         }
-        // return the index the string is mapping to
-        // unsigned h = 0, g;
-        // for (const char *p = word.c_str(); *p; p++) {
-        //     h = (h << 4) + (*p);
-        //     if (g = h & 0xf0000000) {
-        //         h ^= g >> 24;
-        //         h ^= g;
-        //     }
-        // }
         return hash % tableSize;
     }
 
@@ -75,8 +65,6 @@ public:
                     return false;   // the word is already present
             }
         }
-        // cout << word << "\n";
-
         chain.push_back(word);      // add a new node
         // successfully inserted the word
         numElement++;               // increment the size
@@ -128,16 +116,13 @@ public:
 };
 
 // Ordering a to z for priority queue
-class CompareAlphabets
-{
+class CompareAlphabets {
 public:
     bool operator()(string word1, string word2) {
-        // return a is ordered after z
         return word1 > word2; 
     }
 };
 
-// checking for an omission
 void checkOmission(string userInput, const HashTable& hashTable, 
     priority_queue<string, std::vector<string>, CompareAlphabets>& suggestedWords) {  
     // Try adding a single letter at all possible places in the word
@@ -152,7 +137,6 @@ void checkOmission(string userInput, const HashTable& hashTable,
     }
 }
 
-// checking for an extra letter
 void checkExtra(string userInput, const HashTable& hashTable, 
     priority_queue<string, std::vector<string>, CompareAlphabets>& suggestedWords) {
     // Try removing a single letter from the word
@@ -165,7 +149,6 @@ void checkExtra(string userInput, const HashTable& hashTable,
     }
 }
 
-// checking for a typo
 void checkTypo(string userInput, const HashTable& hashTable, 
     priority_queue<string, std::vector<string>, CompareAlphabets>& suggestedWords) {
     // Try replacing an existing letter in the word with some other letter
@@ -180,7 +163,6 @@ void checkTypo(string userInput, const HashTable& hashTable,
     }
 }
 
-// checking for a transposition
 void checkTransposition(string userInput, const HashTable& hashTable, 
     priority_queue<string, std::vector<string>, CompareAlphabets>& suggestedWords) {
     // Try transposing adjacent letters
@@ -194,7 +176,6 @@ void checkTransposition(string userInput, const HashTable& hashTable,
     }
 }
 
-// checking for a missing space
 void checkMissingSpace(string userInput, const HashTable& hashTable, 
     priority_queue<string, std::vector<string>, CompareAlphabets>& suggestedWords) {
     // Try adding a single space at all possible places in the word
@@ -211,7 +192,6 @@ void checkMissingSpace(string userInput, const HashTable& hashTable,
 void suggest(string userInput, const HashTable& hashTable) {
     // Make an empty priority queue
     priority_queue<string, std::vector<string>, CompareAlphabets> suggestedWords;
-    // Note: The functions below CHANGE suggestedWords
     // check if the user omitted a letter
     checkOmission(userInput, hashTable, suggestedWords);
     // check if the user added an extraneous letter
@@ -237,7 +217,6 @@ void suggest(string userInput, const HashTable& hashTable) {
 
 int main() {
     HashTable hashTable{10000, "dictionary.txt"};
-    cout << hashTable.size();       // For testing. TODO: erase this
     string userInput;
 
     while (userInput != ".") {
