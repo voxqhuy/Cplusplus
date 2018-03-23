@@ -5,15 +5,14 @@
 //  Date last modified: March 27, 2018
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment. 
 
+using namespace std;
 #include <fstream>      // std::ifstream
 #include <iostream>     // std::cout, std::fixed
 #include <vector>       // std::vector
 #include <string>       // std::string
 #include <queue>        // std::priority_queue
 #include <cstddef>      // std::size_t
-using namespace std;
 
-// HashTable class
 class HashTable {
 private:
     vector<vector<string>> nodesTable;      // hash nodes array
@@ -32,7 +31,8 @@ public:
             exit(1);            // Unable to open the file, exit the function
         }
         while (file >> word) {
-            bool didInsertSuccessfully = insert(word);      // fill the hash table with words
+            bool inserting = insert(word);      // fill the hash table with words
+            (void)inserting;    // silence the unused-variable warning
         }
     }
 
