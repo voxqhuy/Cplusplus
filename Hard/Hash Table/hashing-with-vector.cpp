@@ -123,21 +123,21 @@ public:
     }
 };
 
-void checkOmission(string userInput, const HashTable& hashTable, 
+void checkOmission(const string userInput, const HashTable& hashTable, 
     priority_queue<string, std::vector<string>, CompareAlphabets>& suggestedWords) {  
     // Try adding a single letter at all possible places in the word
     // If any match a word in the hash table, push into the queue for printing later
     for (size_t i = 0; i <= userInput.length(); i++) {
         for (char j = 'a'; j <= 'z'; j++) {
             string testingWord = userInput;     // make a copy of userInput to test 
-            if (hashTable.contain(testingWord.insert(i, string(1, j)))) { // FIXME: j doesn't work, has to convert j to string??
+            if (hashTable.contain(testingWord.insert(i, string(1, j)))) {
                 suggestedWords.push(testingWord);
             }
         }
     }
 }
 
-void checkExtra(string userInput, const HashTable& hashTable, 
+void checkExtra(const string userInput, const HashTable& hashTable, 
     priority_queue<string, std::vector<string>, CompareAlphabets>& suggestedWords) {
     // Try removing a single letter from the word
     // If any match a word in the hash table, push into the queue for printing later
@@ -149,7 +149,7 @@ void checkExtra(string userInput, const HashTable& hashTable,
     }
 }
 
-void checkTypo(string userInput, const HashTable& hashTable, 
+void checkTypo(const string userInput, const HashTable& hashTable, 
     priority_queue<string, std::vector<string>, CompareAlphabets>& suggestedWords) {
     // Try replacing an existing letter in the word with some other letter
     // If any match a word in the hash table, push into the queue for printing later
@@ -163,7 +163,7 @@ void checkTypo(string userInput, const HashTable& hashTable,
     }
 }
 
-void checkTransposition(string userInput, const HashTable& hashTable, 
+void checkTransposition(const string userInput, const HashTable& hashTable, 
     priority_queue<string, std::vector<string>, CompareAlphabets>& suggestedWords) {
     // Try transposing adjacent letters
     // If any match a word in the hash table, push into the queue for printing later
@@ -176,7 +176,7 @@ void checkTransposition(string userInput, const HashTable& hashTable,
     }
 }
 
-void checkMissingSpace(string userInput, const HashTable& hashTable, 
+void checkMissingSpace(const string userInput, const HashTable& hashTable, 
     priority_queue<string, std::vector<string>, CompareAlphabets>& suggestedWords) {
     // Try adding a single space at all possible places in the word
     // If any match a word in the hash table, push into the queue for printing later
@@ -189,7 +189,7 @@ void checkMissingSpace(string userInput, const HashTable& hashTable,
 }
 
 // Attempt to suggest the user input
-void suggest(string userInput, const HashTable& hashTable) {
+void suggest(const string userInput, const HashTable& hashTable) {
     // Make an empty priority queue
     priority_queue<string, std::vector<string>, CompareAlphabets> suggestedWords;
     // check if the user omitted a letter
@@ -223,12 +223,14 @@ int main() {
         // Prompt user to enter a word
         cout << "\nPlease enter a word (type a single period '.' to terminate): ";
         cin >> userInput;           // save the word to userInput
-        if (hashTable.contain(userInput)) {
-            cout << "* (The word is acceptable)\n";     // founded the word in hash table, it is acceptable
-        }
-        else {
-            // the word is not found, suggesting..
-            suggest(userInput, hashTable);
+        if (userInput != ".") {     // prevent the codes run in case of '.'
+            if (hashTable.contain(userInput)) {
+                cout << "* (The word is acceptable)\n";     // founded the word in hash table, it is acceptable
+            }
+            else {
+                // the word is not found, suggesting..
+                suggest(userInput, hashTable);
+            }
         }
     }
 }
