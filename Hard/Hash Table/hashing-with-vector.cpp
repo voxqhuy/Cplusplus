@@ -14,35 +14,10 @@
 #include <algorithm>
 using namespace std;
 
-// Each Node in HashTable
-class HashNode {
-private:
-    string data;
-    // HashNode* next = nullptr;
-public:
-    /***    CONSTRUCTOR     ***/
-    HashNode(string word): data(word) {}
-    HashNode() {}
-
-    string getData() {
-        return data;
-    }
-    // getters and setters
-    // HashNode* getNext() {
-    //     return next;
-    // }
-    void setData(string word) {
-        this->data = word;
-    }
-    // void setNext(HashNode* next) {
-    //     this->next = next;
-    // }
-};
-
 // HashTable class
 class HashTable {
 private:
-    vector<vector<HashNode>> nodesTable;      // hash nodes array
+    vector<vector<string>> nodesTable;      // hash nodes array
     unsigned tableSize;         // hash table size
     unsigned numElement;        // number of elements
 public:
@@ -71,7 +46,6 @@ public:
     // Using Fowler-Noll-Vo Hash (FNV)
     // based on:https://www.programmingalgorithms.com/algorithm/fnv-hash?lang=C%2B%2B
     unsigned hash(string word) const {
-        // return 0;
         const unsigned fnv_prime = 0x811C9DC5;
         unsigned hash = 0;      // hashing index
 
@@ -100,28 +74,18 @@ public:
         unsigned index = hash(word); 
         cout << index << ' ';
         // the chain at that index
-        vector<HashNode>& chain = nodesTable[index];
+        vector<string>& chain = nodesTable[index];
         // check if the word is already present
-        cout << "beforeee";
-        cout << '<' << chain.size() << '>' << ' ';
         if (!chain.empty()) {       // the chain is not empty
             for (auto &it : chain) {
-                if (it.getData() == word)
+                if (it == word)
                     return false;   // the word is already present
             }
         }
-        cout << "afterrrr";
-        HashNode hashNode;       // FIXME: Do I need this or delete?
-        hashNode.setData(word);
-        chain.push_back(hashNode);                    // add a new node
-        for_each(
-            begin(chain),
-            end(chain),
-            [](HashNode s) {cout << s.getData() << "\n"; } );
-        
+
+        chain.push_back(word);      // add a new node
         // successfully inserted the word
         numElement++;               // increment the size
-        // cout << nodesTable[784][0].getData() << "\n"; 
         return true;
     }
 
@@ -132,11 +96,11 @@ public:
         // the index of the word in the hash table
         unsigned index = hash(word); 
         // the chain at that index
-        vector<HashNode>& chain = nodesTable[index];
+        vector<string>& chain = nodesTable[index];
         // check if the word is present
         if (!chain.empty()) {               // the chain is not empty
             for (auto it = chain.begin(); it != chain.end(); it++) {
-                if (it->getData() == word) {
+                if (*it == word) {
                     it = chain.erase(it);
                     numElement--;
                     return true;            // successfully found and removed the word
@@ -152,11 +116,11 @@ public:
         // the index of the word in the hash table
         unsigned index = hash(word); 
         // the chain at that index
-        vector<HashNode> chain = nodesTable[index];
+        vector<string> chain = nodesTable[index];
         // check if the word is present
         if (!chain.empty()) {               // the chain is not empty
-            for (auto it = chain.begin(); it != chain.end(); it++) {
-                if (it->getData() == word)
+            for (auto &it : chain) {
+                if (it == word)
                     return true;            // the word is present
             }
         }
