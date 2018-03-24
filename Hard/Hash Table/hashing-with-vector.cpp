@@ -181,9 +181,15 @@ void checkMissingSpace(const string userInput, const HashTable& hashTable,
     // Try adding a single space at all possible places in the word
     // If any match a word in the hash table, push into the queue for printing later
     for (size_t i = 1; i < userInput.length(); i++) {
-        string testingWord = userInput;         // make a copy of userInput to test 
-        if (hashTable.contain(testingWord.insert(i, string(1, ' ')))) {
-            suggestedWords.push(testingWord);
+        string testingWord1 = userInput.substr(0, i);       // make a copy of first word
+        string testingWord2 = userInput.substr(i);          // make a copy of second word
+        if (hashTable.contain(testingWord1) && hashTable.contain(testingWord2)) {
+            // both words match words in the hash table, add the word pair
+            suggestedWords.push(testingWord1 + ' ' + testingWord2);
+        } else if (hashTable.contain(testingWord1)) {
+            suggestedWords.push(testingWord1);
+        } else if (hashTable.contain(testingWord2)) {
+            suggestedWords.push(testingWord2);
         }
     }
 }
