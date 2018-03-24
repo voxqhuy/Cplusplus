@@ -2,7 +2,7 @@
 //  Assignment number: 5
 //  Assignment: Spell Checking with the Hash Table Data Structure
 //  File name: huy.cpp
-//  Date last modified: March 27, 2018
+//  Date last modified: March 25, 2018
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment. 
 
 using namespace std;
@@ -80,16 +80,16 @@ public:
         // the chain at that index
         vector<string>& chain = nodesTable[index];
         // check if the word is present
-        if (!chain.empty()) {               // the chain is not empty
+        if (!chain.empty()) {       // the chain is not empty
             for (auto it = chain.begin(); it != chain.end(); it++) {
                 if (*it == word) {
                     it = chain.erase(it);
                     numElement--;
-                    return true;            // successfully found and removed the word
+                    return true;    // successfully found and removed the word
                 }
             }
         }
-        return false;                       // the word is not present
+        return false;               // the word is not present
     }
 
     // returns true if the hash table contains a given word
@@ -100,13 +100,13 @@ public:
         // the chain at that index
         vector<string> chain = nodesTable[index];
         // check if the word is present
-        if (!chain.empty()) {               // the chain is not empty
+        if (!chain.empty()) {       // the chain is not empty
             for (auto &it : chain) {
                 if (it == word)
-                    return true;            // the word is present
+                    return true;    // the word is present
             }
         }
-        return false;                       // the word is not present
+        return false;               // the word is not present
     }
 
     // returns the total number of strings in the hash table
@@ -181,8 +181,8 @@ void checkMissingSpace(const string userInput, const HashTable& hashTable,
     // Try adding a single space at all possible places in the word
     // If any match a word in the hash table, push into the queue for printing later
     for (size_t i = 1; i < userInput.length(); i++) {
-        string testingWord1 = userInput.substr(0, i);       // make a copy of first word
-        string testingWord2 = userInput.substr(i);          // make a copy of second word
+        string testingWord1 = userInput.substr(0, i);   // make a copy of the first word
+        string testingWord2 = userInput.substr(i);      // make a copy of the second word
         if (hashTable.contain(testingWord1) && hashTable.contain(testingWord2)) {
             // both words match words in the hash table, add the word pair
             suggestedWords.push(testingWord1 + ' ' + testingWord2);

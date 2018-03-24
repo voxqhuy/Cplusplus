@@ -41,12 +41,10 @@ private:
     HashNode **nodesArray;      // hash nodes array
     unsigned tableSize;         // hash table size
     unsigned numElement;        // number of elements
-    string fileName;
 public:
     /***    CONSTRUCTOR     ***/
     HashTable (unsigned tableSize, string fileName) {
         this->tableSize = tableSize;
-        this->fileName = fileName;
         numElement = 0;         // Intial size = 0
 
         // Initialize the size of hash table
@@ -54,6 +52,17 @@ public:
         // initialize all nodes as null
         for (unsigned i = 0; i < tableSize; i++) 
             nodesArray[i] = nullptr;
+
+        ifstream file(fileName);// reading the text   
+        string word;            // each word in the text file
+        if (!file) {            // Check if the text file could be opened
+            cout  << "Unable to open file " + fileName;
+            exit(1);            // Unable to open the file, exit the function
+        }
+        while (file >> word) {
+            bool inserting = insert(word);      // fill the hash table with words
+            (void)inserting;    // silence the unused-variable warning
+        }
         
     }
 
@@ -219,9 +228,15 @@ void checkMissingSpace(string userInput, HashTable* hashTable,
     // Try adding a single space at all possible places in the word
     // If any match a word in the hash table, push into the queue for printing later
     for (size_t i = 1; i < userInput.length(); i++) {
-        string testingWord = userInput;         // make a copy of userInput to test 
-        if (hashTable->contains(testingWord.insert(i, string(1, ' ')))) { // FIXME: j doesn't work, has to convert j to string??
-            correctedWords.push(testingWord);
+        string testingWord1 = userInput.substr(0, i);   // make a copy of the first word
+        string testingWord2 = userInput.substr(i);      // make a copy of the second word
+        if (hashTable->contain(testingWord1) && hashTable->contain(testingWord2)) {
+            // both words match words in the hash table, add the word pair
+            suggestedWords.push(testingWord1 + ' ' + testingWord2);
+        } else if (hashTable->contain(testingWord1)) {
+            suggestedWords.push(testingWord1);
+        } else if (hashTable->contain(testingWord2)) {
+            suggestedWords.push(testingWord2);
         }
     }
 }
@@ -254,20 +269,21 @@ void correction(string userInput, HashTable* hashTable) {
 }
 
 int main() {
-    HashTable* hashTable = new HashTable(109582, "dictionary.txt");
-    cout << hashTable->size();      // For testing. TODO: erase this
+    HashTable hashTable{10000, "dictionary.txt"};
     string userInput;
 
     while (userInput != ".") {
         // Prompt user to enter a word
-        cout << "Please enter a word (type a single period '.' to terminate): ";
+        cout << "\nPlease enter a word (type a single period '.' to terminate): ";
         cin >> userInput;           // save the word to userInput
-        if (hashTable->contains(userInput)) {
-            cout << '*';            // founded the word in hash table, it is acceptable
-        }
-        else {
-            // the word is not found, correcting..
-            correction(userInput, hashTable);
+        if (userInput != ".") {     // prevent the codes run in case of '.'
+            if (hashTable.contain(userInput)) {
+                cout << "* (The word is acceptable)\n";     // founded the word in hash table, it is acceptable
+            }
+            else {
+                // the word is not found, suggesting..
+                correction(userInput, hashTable);
+            }
         }
     }
     
