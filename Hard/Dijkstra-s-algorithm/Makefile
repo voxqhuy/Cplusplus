@@ -1,4 +1,4 @@
-PROGNAME = spm
+PROGNAME = test_spm
 
 a.exe: ${PROGNAME}.cpp
 	c:/MinGW/bin/g++ -Wall -std=c++17 -o a.exe -g -Ic:/MinGW/include ${PROGNAME}.cpp

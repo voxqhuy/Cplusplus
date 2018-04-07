@@ -7,7 +7,7 @@
 // Ordering distances so that smallest gets served first
 class distanceSort {
 public:
-    bool operator()(pair<int, int> num1, pair<int, int> num2) {
+    bool operator()(std::pair<int, int> num1, std::pair<int, int> num2) {
         return num1.second > num2.second;   // (pair) vertex : distance
     }
 };
