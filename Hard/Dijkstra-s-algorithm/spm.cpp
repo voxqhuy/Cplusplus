@@ -1,7 +1,25 @@
 #include "spm.h"
+#include <queue>        // std::priority_queue
 
-int dijkstra_distance(const AdjacencyMatrix& in, int row, int column) {
-    // Create 
+// Ordering distances so that smallest gets served first
+class distanceSort {
+public:
+    bool operator()(pair<int, int> num1, pair<int, int> num2) {
+        return num1.second > num2.second;       // (pair) vertex : distance
+    }
+};
+
+int dijkstra_distance(const AdjacencyMatrix& in, int start, int dest) {
+    // the size of one side of passed in matrix = the number of vertices of the graph
+    int size = in.size();
+    // A queue that keep all the vertices with their distances from the start vertex
+    priority_queue<pair<int, int>, std::vector<pair<int, int>>, distanceSort>unsolvedVertices;
+    // A queue keeping the vertices that are solved for the shortest path
+    priority_queue<pair<int, int>, std::vector<pair<int, int>>, distanceSort>solvedVertices;
+
+    for ( unsigned i = 0; i < size; i++) {
+        in
+    }
 }
 
 // Builds and returns the shortest path matrix from a graph's adjacency 
