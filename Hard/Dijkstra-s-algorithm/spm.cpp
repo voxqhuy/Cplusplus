@@ -1,3 +1,4 @@
+#include "spm.h"
 #include <climits>      // INT_MAX
 #include <queue>        // std::priority_queue
 #include <map>          // std::map
