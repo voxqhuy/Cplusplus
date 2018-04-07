@@ -1,5 +1,7 @@
 #include "spm.h"
+#include <climits>      // INT_MAX
 #include <queue>        // std::priority_queue
+#include <map>          // std::map
 
 // Ordering distances so that smallest gets served first
 class distanceSort {
@@ -13,12 +15,18 @@ int dijkstra_distance(const AdjacencyMatrix& in, int start, int dest) {
     // the size of one side of passed in matrix = the number of vertices of the graph
     int size = in.size();
     // A queue that keep all the vertices with their distances from the start vertex
-    priority_queue<pair<int, int>, std::vector<pair<int, int>>, distanceSort>unsolvedVertices;
-    // A queue keeping the vertices that are solved for the shortest path
-    priority_queue<pair<int, int>, std::vector<pair<int, int>>, distanceSort>solvedVertices;
-
+    priority_queue<pair<int, int>, std::vector<pair<int, int>>, distanceSort> uncalculatedVertices;
+    // A map does the job of shortest path table. Intially, it is empty.
+    std::map<int, int> calculatedVertices;
+    // Initilize the queue
     for ( unsigned i = 0; i < size; i++) {
-        in
+        // the start vertex has a distance of 0
+        if ( i == start ) {
+            uncalculatedVertices.enqueue(i, 0);
+        } else {
+            // other vertices have infinity distance
+            uncalculatedVertices.enqueue(i, INF);
+        }
     }
 }
 
