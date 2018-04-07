@@ -1,4 +1,4 @@
-PROGNAME = main
+PROGNAME = testing
 
 a.exe: ${PROGNAME}.cpp
 	c:/MinGW/bin/g++ -Wall -std=c++17 -o a.exe -g -Ic:/MinGW/include ${PROGNAME}.cpp
