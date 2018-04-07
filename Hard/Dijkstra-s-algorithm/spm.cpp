@@ -1,9 +1,7 @@
-#include "spm.h"
 #include <climits>      // INT_MAX
 #include <queue>        // std::priority_queue
 #include <map>          // std::map
 #include <algorithm>    // std::fill_n
-#include <cstddef>      // std::size_t
 
 // Ordering distances so that smallest gets served first
 class distanceSort {
@@ -13,9 +11,9 @@ public:
     }
 };
 
-int dijkstra_distance(const AdjacencyMatrix& in, std::size_t start, std::size_t dest) {
+int dijkstra_distance(const AdjacencyMatrix& in, int start, int dest) {
     // the size of one side of passed in matrix = the number of vertices of the graph
-    std::size_t size = in.size();
+    int size = in.size();
     // A queue that keep all the vertices with their distances from the start vertex
     std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, distanceSort> uncheckeds;
     // An array does the job of shortest path table. Intially, it is empty.
@@ -24,7 +22,7 @@ int dijkstra_distance(const AdjacencyMatrix& in, std::size_t start, std::size_t 
     std::fill_n(checkeds, size, INF);
     checkeds[start] = 0;
     // Initilize the queue
-    for ( std::size_t i = 0; i < size; i++) {
+    for ( int i = 0; i < size; i++) {
         // the start vertex has a distance of 0
         if ( i == start ) {
             uncheckeds.push(i, 0);
@@ -39,8 +37,8 @@ int dijkstra_distance(const AdjacencyMatrix& in, std::size_t start, std::size_t 
     while (!uncheckeds.empty()) {
         // Get the vertex with the minimum distance
         std::pair<int, int> v = uncheckeds.top();
-        int dist = v.second();              // and its distance
-        if (v.first() == dest) {            // found the shortest path to the destination
+        int dist = v.second;                // and its distance
+        if (v.first == dest) {              // found the shortest path to the destination
             dijkstra_distance = dist;
             break;              
         }
@@ -49,12 +47,12 @@ int dijkstra_distance(const AdjacencyMatrix& in, std::size_t start, std::size_t 
         // A vector that keeps the weights from the closestVertex to all others
         std::vector<int> weights = in[v];
         // Adding all adjacent vertices with the new distances to the queue
-        for ( std::size_t i = 0; i < size; i++) {
+        for ( int i = 0; i < size; i++) {
             int w = weights[i];             // the weight in between
             if (w != -1) {                  // There is an edge in between
                 int d = dist + w;           // new distance = current distance + the weight
                 if (d < checkeds[i]) {      // found a shorter path
-                    checkeds[i] = d;        // Update the table
+                    checkeds[i] = d;        // Update the table TODO: will this actually change the element?
                     uncheckeds.push(i, d);
                 }
             }
@@ -62,8 +60,6 @@ int dijkstra_distance(const AdjacencyMatrix& in, std::size_t start, std::size_t 
     }
     // Deallocation
     uncheckeds = {};
-    delete [] checkeds;  // Free memory allocated for the array.
-    checkeds = NULL;     // Be sure the deallocated memory isn't used.
 
     return dijkstra_distance;
 }
@@ -72,12 +68,12 @@ int dijkstra_distance(const AdjacencyMatrix& in, std::size_t start, std::size_t 
 // matrix using Dijkstra's algorithm.
 AdjacencyMatrix make_spm_dijkstra(const AdjacencyMatrix& in) {
     // the size of one side of passed in matrix = the number of vertices of the graph
-    std::size_t size = in.size();
+    int size = in.size();
     // An empty matrix for being implemented to be the SPM "Shortest Path Matrix"
     AdjacencyMatrix spm = make_empty_graph(size, std::vector<int>(size, INF));
 
-    for ( std::size_t row = 0; row < size; row++ ) {
-        for ( std::size_t col = 0; col < size; col++) {
+    for ( int row = 0; row < size; row++ ) {
+        for ( int col = 0; col < size; col++) {
             // fill the diagonal line with zeros (the distance from one point to itself is 0)
             if (row == col) {
                 spm[row][col] = 0;
