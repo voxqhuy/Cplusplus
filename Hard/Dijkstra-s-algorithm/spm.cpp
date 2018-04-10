@@ -102,7 +102,7 @@ AdjacencyMatrix make_spm_dp(const AdjacencyMatrix& in) {
     // the size of one side of passed in matrix = the number of vertices of the graph
     int size = in.size();
     // An empty matrix for being implemented to be the SPM "Shortest Path Matrix"
-    AdjacencyMatrix spm = make_empty_graph(size, std::vector<int>(size, INF));
+    AdjacencyMatrix spm = make_empty_graph(size, std::vector<int>(size, INF));      // TODO: should i not initilize this INF
     AdjacencyMatrix spm_copied = make_empty_graph(size, std::vector<int>(size, INF));
     // Copying 'spm' and 'spm_copied' from 'in'
     for ( int i = 0; i < size; i++ ) {
@@ -122,10 +122,19 @@ AdjacencyMatrix make_spm_dp(const AdjacencyMatrix& in) {
         for (int row = 0; row < size; row++) {
             for (int col = row + 1; col < size; col++) {
                 if ((bridge != row) && (bridge != col)) {  // avoid treating the same vertex as a bridge
-                    spm_copied[row][col] = minimum
+                    spm_copied[row][col] = minimum(spm[row][col], spm[row][bridge] + spm[bridge][col]);
                 }
             }
         }
+        // copy spm_copied into spm
+        for ( int i = 0; i < size; i++ ) {
+            for ( int j = i + 1; j < size; i++ ) {   
+                int copy = spm_copied[i][j];        // TODO: do I need this?    
+                spm[i][j] = copy;
+                spm[j][i] = copy;
+            }
+        }
     }
+
     return spm;
 }
