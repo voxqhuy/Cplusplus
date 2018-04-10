@@ -12,4 +12,3 @@ AdjacencyMatrix make_spm_dijkstra(const AdjacencyMatrix& in);
 AdjacencyMatrix make_spm_dp(const AdjacencyMatrix& in);
 
 #endif
-
