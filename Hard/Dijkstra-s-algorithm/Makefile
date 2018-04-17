@@ -1,8 +1,5 @@
-
-
 a.exe: test_spm.cpp spm.cpp graph.cpp
 	c:/MinGW/bin/g++ -Wall -std=c++17 -o a.exe -g -Ic:/MinGW/include test_spm.cpp spm.cpp graph.cpp
-
 
 run: a.exe
 	.\a.exe
