@@ -1,7 +1,7 @@
-PROGNAME = test_spm
 
-a.exe: ${PROGNAME}.cpp
-	c:/MinGW/bin/g++ -Wall -std=c++17 -o a.exe -g -Ic:/MinGW/include ${PROGNAME}.cpp
+
+a.exe: test_spm.cpp spm.cpp graph.cpp
+	c:/MinGW/bin/g++ -Wall -std=c++17 -o a.exe -g -Ic:/MinGW/include test_spm.cpp spm.cpp graph.cpp
 
 
 run: a.exe
@@ -11,23 +11,23 @@ clean:
 	del /Q a.exe
 
 15: a.exe
-	a.exe < s_graph15.text
+	a.exe < s_graph15.txt
 
 20: a.exe
-	a.exe < s_graph20.text
+	a.exe < s_graph20.txt
 
 50: a.exe
-	a.exe < s_graph50.text
+	a.exe < s_graph50.txt
 
 100: a.exe
-	a.exe < s_graph100.text
+	a.exe < s_graph100.txt
 
 200: a.exe
-	a.exe < s_graph200.text
+	a.exe < s_graph200.txt
 
 300: a.exe
-	a.exe < s_graph300.text
+	a.exe < s_graph300.txt
 
 1000: a.exe
-	a.exe < s_graph1000.text
+	a.exe < s_graph1000.txt
 

@@ -2,6 +2,8 @@
 #include <queue>        // std::priority_queue
 #include <map>          // std::map
 #include <algorithm>    // std::fill_n
+#include "spm.h"
+// #include "graph.h"
 
 // Ordering distances so that smallest gets served first
 class distanceSort {
@@ -25,10 +27,10 @@ int dijkstra_distance(const AdjacencyMatrix& in, int start, int dest) {
     for (int i = 0; i < size; i++) {
         // the start vertex has a distance of 0
         if ( i == start ) {
-            uncheckeds.push(i, 0);
+            uncheckeds.push(std::pair(i, 0));
         } else {
             // other vertices have infinity distance
-            uncheckeds.push(i, INF);
+            uncheckeds.push(std::pair(i, INF));
         }
     }
 
@@ -42,10 +44,10 @@ int dijkstra_distance(const AdjacencyMatrix& in, int start, int dest) {
             dijkstra_distance = dist;
             break;              
         }
-        uncheckeds.pop();                   // remove the vertex. It is solved
+        uncheckeds.pop();                   // remove the vertex. It is being solved
 
         // A vector that keeps the weights from the closestVertex to all others
-        std::vector<int> weights = in[v];
+        std::vector<int> weights = in[v.first];
         // Adding all adjacent vertices with the new distances to the queue
         for (int i = 0; i < size; i++) {
             int w = weights[i];             // the weight in between
@@ -53,7 +55,7 @@ int dijkstra_distance(const AdjacencyMatrix& in, int start, int dest) {
                 int d = dist + w;           // new distance = current distance + the weight
                 if (d < checkeds[i]) {      // found a shorter path
                     checkeds[i] = d;        // Update the table TODO: will this actually change the element?
-                    uncheckeds.push(i, d);
+                    uncheckeds.push(std::pair(i, d));
                 }
             }
         }
@@ -70,30 +72,27 @@ AdjacencyMatrix make_spm_dijkstra(const AdjacencyMatrix& in) {
     // the size of one side of passed in matrix = the number of vertices of the graph
     int size = in.size();
     // An empty matrix for being implemented to be the SPM "Shortest Path Matrix"
-    AdjacencyMatrix spm = make_empty_graph(size, std::vector<int>(size, INF));
+    AdjacencyMatrix spm = make_empty_graph(size);
 
     for (int row = 0; row < size; row++) {
         for (int col = 0; col < size; col++) {
             // fill the diagonal line with zeros (the distance from one point to itself is 0)
             if (row == col) {
                 spm[row][col] = 0;
-            } 
-            // else if (in [row][col] != INF) {    // the path is solved
-            //     spm[row][col] == in[row][col];      // if it is copiable, otherwise just + 0
-            } else {                        // the path is unsolved
+            } else {        // the path is unsolved
                 // calculate the shortest path
-                in[row][col] = dijkstra_distance(in, row, col);
+                spm[row][col] = dijkstra_distance(in, row, col);
                 // undirected graph = symmetric
-                in[row][col] = in[row][col];
+                spm[row][col] = spm[row][col];
             }
         }
     }
     return spm;
 }
 
-// Return the minimum of two numbers
+// Return the minimum of two numbers    
 int minimum (int a, int b) {
-    return a > b : b ? a;
+    return a > b ? b : a;
 }
 
 // Builds and returns the shortest path matrix from a graph's adjacency 
@@ -102,8 +101,8 @@ AdjacencyMatrix make_spm_dp(const AdjacencyMatrix& in) {
     // the size of one side of passed in matrix = the number of vertices of the graph
     int size = in.size();
     // An empty matrix for being implemented to be the SPM "Shortest Path Matrix"
-    AdjacencyMatrix spm = make_empty_graph(size, std::vector<int>(size, INF));      // TODO: should i not initilize this INF
-    AdjacencyMatrix spm_copied = make_empty_graph(size, std::vector<int>(size, INF));
+    AdjacencyMatrix spm = make_empty_graph(size);      // TODO: should i not initilize this INF
+    AdjacencyMatrix spm_copied = make_empty_graph(size);
     // Copying 'spm' and 'spm_copied' from 'in'
     for ( int i = 0; i < size; i++ ) {
         for ( int j = 0; j < size; i++ ) {
