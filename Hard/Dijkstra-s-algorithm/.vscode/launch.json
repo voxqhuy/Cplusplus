@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "D:/iRoommm/Web dev/Github copies/C-/Hard/Dijkstra-s-algorithm/a.exe",
-            "args": [],
+            "args": ["s_graph15.txt"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

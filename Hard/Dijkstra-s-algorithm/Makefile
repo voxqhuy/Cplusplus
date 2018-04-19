@@ -8,23 +8,23 @@ clean:
 	del /Q a.exe
 
 15: a.exe
-	a.exe < s_graph15.txt
+	a.exe s_graph15.txt
 
 20: a.exe
-	a.exe < s_graph20.txt
+	a.exe s_graph20.txt
 
 50: a.exe
-	a.exe < s_graph50.txt
+	a.exe s_graph50.txt
 
 100: a.exe
-	a.exe < s_graph100.txt
+	a.exe s_graph100.txt
 
 200: a.exe
-	a.exe < s_graph200.txt
+	a.exe s_graph200.txt
 
 300: a.exe
-	a.exe < s_graph300.txt
+	a.exe s_graph300.txt
 
 1000: a.exe
-	a.exe < s_graph1000.txt
+	a.exe s_graph1000.txt
 

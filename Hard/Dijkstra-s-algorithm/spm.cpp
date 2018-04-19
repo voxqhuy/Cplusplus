@@ -2,8 +2,9 @@
 #include <queue>        // std::priority_queue
 #include <map>          // std::map
 #include <algorithm>    // std::fill_n
+#include <iostream>
 #include "spm.h"
-// #include "graph.h"
+#include "graph.h"
 
 // Ordering distances so that smallest gets served first
 class distanceSort {
@@ -75,7 +76,7 @@ AdjacencyMatrix make_spm_dijkstra(const AdjacencyMatrix& in) {
     AdjacencyMatrix spm = make_empty_graph(size);
 
     for (int row = 0; row < size; row++) {
-        for (int col = 0; col < size; col++) {
+        for (int col = row; col < size; col++) {
             // fill the diagonal line with zeros (the distance from one point to itself is 0)
             if (row == col) {
                 spm[row][col] = 0;
@@ -83,7 +84,7 @@ AdjacencyMatrix make_spm_dijkstra(const AdjacencyMatrix& in) {
                 // calculate the shortest path
                 spm[row][col] = dijkstra_distance(in, row, col);
                 // undirected graph = symmetric
-                spm[row][col] = spm[row][col];
+                spm[col][row] = spm[row][col];
             }
         }
     }
