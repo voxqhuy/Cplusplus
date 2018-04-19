@@ -7,6 +7,9 @@ run: a.exe
 clean:
 	del /Q a.exe
 
+5: a.exe
+	a.exe s_graph5.txt
+
 15: a.exe
 	a.exe s_graph15.txt
 

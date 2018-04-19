@@ -49,10 +49,11 @@ int dijkstra_distance(const AdjacencyMatrix& in, int start, int dest) {
 
         // A vector that keeps the weights from the closestVertex to all others
         std::vector<int> weights = in[v.first];
+
         // Adding all adjacent vertices with the new distances to the queue
         for (int i = 0; i < size; i++) {
             int w = weights[i];             // the weight in between
-            if (w != -1) {                  // There is an edge in between
+            if (w != INF) {                  // There is an edge in between
                 int d = dist + w;           // new distance = current distance + the weight
                 if (d < checkeds[i]) {      // found a shorter path
                     checkeds[i] = d;        // Update the table TODO: will this actually change the element?
