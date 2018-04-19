@@ -1,8 +1,6 @@
 #include <climits>      // INT_MAX
 #include <queue>        // std::priority_queue
-#include <map>          // std::map
 #include <algorithm>    // std::fill_n
-#include <iostream>
 #include "spm.h"
 #include "graph.h"
 
@@ -53,10 +51,10 @@ int dijkstra_distance(const AdjacencyMatrix& in, int start, int dest) {
         // Adding all adjacent vertices with the new distances to the queue
         for (int i = 0; i < size; i++) {
             int w = weights[i];             // the weight in between
-            if (w != INF) {                  // There is an edge in between
+            if (w != INF) {                 // There is an edge in between
                 int d = dist + w;           // new distance = current distance + the weight
                 if (d < checkeds[i]) {      // found a shorter path
-                    checkeds[i] = d;        // Update the table TODO: will this actually change the element?
+                    checkeds[i] = d;        
                     uncheckeds.push(std::pair(i, d));
                 }
             }
@@ -81,7 +79,7 @@ AdjacencyMatrix make_spm_dijkstra(const AdjacencyMatrix& in) {
             // fill the diagonal line with zeros (the distance from one point to itself is 0)
             if (row == col) {
                 spm[row][col] = 0;
-            } else {        // the path is unsolved
+            } else {        // not the diagonal line
                 // calculate the shortest path
                 spm[row][col] = dijkstra_distance(in, row, col);
                 // undirected graph = symmetric
@@ -103,18 +101,17 @@ AdjacencyMatrix make_spm_dp(const AdjacencyMatrix& in) {
     // the size of one side of passed in matrix = the number of vertices of the graph
     int size = in.size();
     // An empty matrix for being implemented to be the SPM "Shortest Path Matrix"
-    AdjacencyMatrix spm = make_empty_graph(size);      // TODO: should i not initilize this INF
+    AdjacencyMatrix spm = make_empty_graph(size); 
     AdjacencyMatrix spm_copied = make_empty_graph(size);
     // Copying 'spm' and 'spm_copied' from 'in'
     for ( int i = 0; i < size; i++ ) {
-        for ( int j = 0; j < size; i++ ) {
-            if (i == j) {
+        for ( int j = 0; j < size; j++ ) {
+            if (i == j) {       // the diagonal line
                 spm[i][j] = 0;
                 spm_copied[i][j] = 0;
-            } else {
-                int copy = in[i][j];        // TODO: do I need this?
-                spm[i][j] = copy;           // TODO: is it copiable?
-                spm_copied[i][j] = copy;
+            } else {            // copying
+                spm[i][j] = in[i][j];           
+                spm_copied[i][j] = in[i][j];
             }
         }
     }
@@ -123,19 +120,21 @@ AdjacencyMatrix make_spm_dp(const AdjacencyMatrix& in) {
         for (int row = 0; row < size; row++) {
             for (int col = row + 1; col < size; col++) {
                 if ((bridge != row) && (bridge != col)) {  // avoid treating the same vertex as a bridge
-                    spm_copied[row][col] = minimum(spm[row][col], spm[row][bridge] + spm[bridge][col]);
+                    if ((spm[row][bridge] == INF) || (spm[bridge][col] == INF)) {
+                        spm_copied[row][col] = spm[row][col];
+                    } else {
+                        spm_copied[row][col] = minimum(spm[row][col], spm[row][bridge] + spm[bridge][col]);
+                    }
                 }
             }
         }
         // copy spm_copied into spm
         for ( int i = 0; i < size; i++ ) {
-            for ( int j = i + 1; j < size; i++ ) {   
-                int copy = spm_copied[i][j];        // TODO: do I need this?    
-                spm[i][j] = copy;
-                spm[j][i] = copy;
+            for ( int j = i + 1; j < size; j++ ) {     
+                spm[i][j] = spm_copied[i][j];
+                spm[j][i] = spm_copied[i][j];
             }
         }
     }
-
     return spm;
 }
