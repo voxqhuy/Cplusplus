@@ -18,13 +18,13 @@ class Block {
 
     public:     // member functions
     // getters
-    bool isValid {return valid;}
-    bool isDirty {return dirty;}
-    unsigned getTag {return tag;}
+    bool isValid() {return this->valid;}
+    bool isDirty() {return this->dirty;}
+    unsigned getTag() {return this->tag;}
     //setters
-    void setValid(bool valid) {this.valid = valid;}
-    void setDirty(bool dirty) {this.dirty = dirty;}
-    void setTag(unsigned tag) {this.tag = tag;}
+    void setValid(bool valid) {this->valid = valid;}
+    void setDirty(bool dirty) {this->dirty = dirty;}
+    void setTag(unsigned tag) {this->tag = tag;}
 };
 
 class Cache {
@@ -49,7 +49,7 @@ class Cache {
         for (size_t i = 0; i < traces.size(); i++) {
             // Get data from each trace
             pair<char, unsigned> trace = traces[i];
-            char cmd = trace.first          // the command (read or write)
+            char cmd = trace.first;          // the command (read or write)
             unsigned adr = trace.second;    // the address
             adr >>= 8;                      // shift right 8 bits
             unsigned index = adr & mask;    // masking the cache index
@@ -132,19 +132,19 @@ int main(int argc, char** argv)
              << "  cache_sim <filename>" << endl;
 	
 	// 32KB direct mapped cache with a 256-byte block size
-    Cache cache1 = new Cache(32768, 256, 1);
-    cache1.process(memoryTraces, indexMask1);
+    Cache* cache1 = new Cache(32768, 256, 1);
+    cache1->process(memoryTraces, indexMask1);
 	
 	// 32KB 4-way set associative cache with a 256-byte block size
-	Cache cache2 = new Cache(32768, 256, 4);
-    cache2.process(memoryTraces, indexMask2);
+	Cache* cache2 = new Cache(32768, 256, 4);
+    cache2->process(memoryTraces, indexMask2);
 
 	// 32KB 8-way set associative cache with a 256-byte block size
-	Cache cache3 = new Cache(32768, 256, 8);
-    cache3.process(memoryTraces, indexMask3);
+	Cache* cache3 = new Cache(32768, 256, 8);
+    cache3->process(memoryTraces, indexMask3);
 
 	// 32KB fully associative cache with a 256-byte block size
-	Cache cache4 = new Cache(32768, 256, 128);
-    cache4.process(memoryTraces, indexMask4);
+	Cache* cache4 = new Cache(32768, 256, 128);
+    cache4->process(memoryTraces, indexMask4);
 	
 }
