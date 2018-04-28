@@ -1,3 +1,10 @@
+//  Name: Vo Huy
+//  Assignment number: 6
+//  Assignment: Shortest Path Matrix
+//  File name: spm.cpp
+//  Date last modified: April 19, 2018
+//  Honor statement: I have neither given nor received any unauthorized help on this assignment. 
+
 #include <climits>      // INT_MAX
 #include <queue>        // std::priority_queue
 #include <algorithm>    // std::fill_n
@@ -138,3 +145,14 @@ AdjacencyMatrix make_spm_dp(const AdjacencyMatrix& in) {
     }
     return spm;
 }
+
+/*                                  RESULTS REPORT  
+/            
+/   15-word matrix: 0.003 seconds (Dijkstra), 0 seconds (Dynamic Programming)
+/   20-word matrix: 0.025 seconds (Dijkstra), 0.001 seconds (Dynamic Programming)
+/   50-word matrix: 0.064 seconds (Dijkstra), 0.004 seconds (Dynamic Programming)
+/   100-word matrix: 1.172 seconds (Dijkstra), 0.049 seconds (Dynamic Programming)
+/   200-word matrix: 24.28 seconds (Dijkstra), 0.43 seconds (Dynamic Programming)
+/   300-word matrix: 98.944 seconds (Dijkstra), 1.406 seconds (Dynamic Programming)
+/
+*/

@@ -3,7 +3,8 @@
 #include <iostream>  //  For normal output: cout, endl
 #include <fstream>   //  For file streams
 #include <iomanip>   //  For the hex and dec stream manipulators
-#include <queue>     //  std::queue
+#include <vector>    //  std::vector
+#include <bitset>
 
 using namespace std;
 
@@ -12,16 +13,38 @@ class Cache {
 		// properties
         unsigned mMemory;
         unsigned mBlockSize;
-        unsigned mWayNum;     // number of ways
-		Block **blocks;
+        unsigned mWayNum;       // number of ways
+        unsigned mIndexNum;     // number of cache indexes
+		Block *blocks;          // the cache
     public:
 		// Constructor
         Cache(unsigned memory, unsigned blockSize, unsigned wayNum) 
 			: mMemory(memory), mBlockSize(blockSize), mWayNum(wayNum),
-			blocks(mMemory/mBlockSize) {}
+			mIndexNum(mMemory/(mBlockSize * mWayNum)) {
+                // initialize the cache size as a multidimensional array
+                blocks = new Block[mIndexNum][mWayNum];
+            }
 		
 		Block getBlocks {return blocks;}
-};
+
+        void process(vector<pair<char, unsigned>> traces) {
+            for (unsigned i = 0; i < traces.size(); i++ {
+                unsigned command = traces[i];
+                command >>= 8;               // shift right 8 bits
+                unsigned index = command & indexMask;   // masking the cache index
+                unsigned tag = command >> mIndexNum;    // shift 6 bits to get the tag
+
+                cache1.
+                if (!cache[index].isValid) {
+                    cout << "hit ";
+                }
+                if (trace.first = 'w') {
+                    
+                }
+                else if (trace.first = 'r')
+	        }
+        }
+}; 
 
 class Block {
 	private:
@@ -40,17 +63,22 @@ class Block {
 		void setVTag(bool tag) {this.tag = tag;}
 };
 
-//  Augmment this function to properly perform the 
-//  cache simulation
-// void process(char cmd, unsigned addr)
-// {
-//     cout << "Command: " << cmd 
-//          << ", address: " << dec << addr
-//          << " (hex " << hex << addr << ')' << endl;
-// }
+ Augmment this function to properly perform the 
+ cache simulation
+void process(char cmd, unsigned addr)
+{
+    cout << "Command: " << cmd 
+         << ", address: " << dec << addr
+         << " (hex " << hex << addr << ')' << endl;
+}
 
 int main(int argc, char** argv)
 {
+    const unsigned indexMask1 = 0x7F;           // for masking cache 1
+    const unsigned indexMask2 = 0x1F;                  // TODO: masks
+    const unsigned indexMask3 = 0xF;
+    const unsigned indexMask4 = 1; 
+
     vector<pair<char, unsigned>> memoryTraces;
     if ( argc > 1 )  //  Require a data file
     {
@@ -82,18 +110,18 @@ int main(int argc, char** argv)
 	
 	// 32KB direct mapped cache with a 256-byte block size
     Cache cache1 = new Cache(32768, 256, 1);
-	for (unsigned i = 0; i < memoryTraces.size(); i++ {
-		if (memoryTraces)
-		if (trace.first = 'w') {
-			
-		}
-		else if (trace.first = 'r')
-	}
+    cache1.process(memoryTraces, indexMask1);
+	
 	// 32KB 4-way set associative cache with a 256-byte block size
 	Cache cache2 = new Cache(32768, 256, 4);
+    cache2.process(memoryTraces, indexMask2);
+
 	// 32KB 8-way set associative cache with a 256-byte block size
 	Cache cache3 = new Cache(32768, 256, 8);
+    cache3.process(memoryTraces, indexMask3);
+
 	// 32KB fully associative cache with a 256-byte block size
 	Cache cache4 = new Cache(32768, 256, 128);
+    cache4.process(memoryTraces, indexMask4);
 	
 }
