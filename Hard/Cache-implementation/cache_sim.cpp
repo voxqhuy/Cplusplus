@@ -4,7 +4,8 @@
 #include <fstream>   //  For file streams
 #include <iomanip>   //  For the hex and dec stream manipulators
 #include <vector>    //  std::vector
-#include <bitset>
+#include <string>
+#include <cstddef>   //  std::size_t
 
 using namespace std;
 
@@ -15,34 +16,66 @@ class Cache {
         unsigned mBlockSize;
         unsigned mWayNum;       // number of ways
         unsigned mIndexNum;     // number of cache indexes
-		Block *blocks;          // the cache
+		Block *mBlocks;          // the cache
     public:
 		// Constructor
         Cache(unsigned memory, unsigned blockSize, unsigned wayNum) 
 			: mMemory(memory), mBlockSize(blockSize), mWayNum(wayNum),
 			mIndexNum(mMemory/(mBlockSize * mWayNum)) {
                 // initialize the cache size as a multidimensional array
-                blocks = new Block[mIndexNum][mWayNum];
+                mBlocks = new Block[mIndexNum][mWayNum];
             }
 		
-		Block getBlocks {return blocks;}
+		// Block getBlocks {return blocks;}
 
-        void process(vector<pair<char, unsigned>> traces) {
-            for (unsigned i = 0; i < traces.size(); i++ {
-                unsigned command = traces[i];
-                command >>= 8;               // shift right 8 bits
-                unsigned index = command & indexMask;   // masking the cache index
-                unsigned tag = command >> mIndexNum;    // shift 6 bits to get the tag
+        // processing commands
+        void process(vector<pair<char, unsigned>> traces, unsigned mask) {
+            for (size_t i = 0; i < traces.size(); i++) {
+                // Get data from each trace
+                pair<char, unsigned> trace = traces[i];
+                char cmd = trace.first          // the command (read or write)
+                unsigned adr = trace.second;    // the address
+                adr >>= 8;                      // shift right 8 bits
+                unsigned index = adr & mask;    // masking the cache index
+                unsigned tag = adr >> mIndexNum;// shift 6 bits to get the tag
 
-                cache1.
-                if (!cache[index].isValid) {
-                    cout << "hit ";
-                }
-                if (trace.first = 'w') {
-                    
-                }
-                else if (trace.first = 'r')
+                Block* row = mBlocks[mIndexNum];
+                cout << hitOrMiss(row, tag, cmd);
+                cout << " ";
 	        }
+        }
+
+        // Hit or Miss?
+        string hitOrMiss(const Block* row, unsigned tag, char cmd) {
+            string result;
+            for (size_t i = 0; i < row.size(); i++) {
+                Block block = row[i];
+                if (block.isValid) {        // valid block
+                    if(block.getTag() == tag) {     // same tag?
+                        result = "hit";
+                        // set dirty bit to true if it is a write, otherwise dont do anything
+                        if (cmd == 'w') { block.setDirty(true); }
+                    } else {                // different tag
+                        result = "miss with write-back";
+                        // write-back a new tag
+                        block.setTag(tag);
+                        // set dirty bit to true if it is a write
+                        if (cmd == 'w') {
+                            block.setDirty(true);
+                        } else {    // set it to false if it is a read
+                            block.setDirty(false);
+                        }
+                    }
+                } else {                    // invalid block
+                    result = "miss";
+                    block.setTag(tag);
+                    // set dirty bit to true if it is a write, otherwise dont do anything
+                    if (cmd == 'w') { block.setDirty(true); }
+                }
+                // set block valid
+                block.setValid(true);
+            }
+            return result;
         }
 }; 
 
@@ -60,7 +93,7 @@ class Block {
 		//setters
 		void setValid(bool valid) {this.valid = valid;}
 		void setDirty(bool dirty) {this.dirty = dirty;}
-		void setVTag(bool tag) {this.tag = tag;}
+		void setTag(bool tag) {this.tag = tag;}
 };
 
  Augmment this function to properly perform the 
