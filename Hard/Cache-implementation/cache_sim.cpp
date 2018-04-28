@@ -9,101 +9,91 @@
 
 using namespace std;
 
-class Cache {
-	private:
-		// properties
-        unsigned mMemory;
-        unsigned mBlockSize;
-        unsigned mWayNum;       // number of ways
-        unsigned mIndexNum;     // number of cache indexes
-		Block *mBlocks;          // the cache
-    public:
-		// Constructor
-        Cache(unsigned memory, unsigned blockSize, unsigned wayNum) 
-			: mMemory(memory), mBlockSize(blockSize), mWayNum(wayNum),
-			mIndexNum(mMemory/(mBlockSize * mWayNum)) {
-                // initialize the cache size as a multidimensional array
-                mBlocks = new Block[mIndexNum][mWayNum];
-            }
-		
-		// Block getBlocks {return blocks;}
-
-        // processing commands
-        void process(vector<pair<char, unsigned>> traces, unsigned mask) {
-            for (size_t i = 0; i < traces.size(); i++) {
-                // Get data from each trace
-                pair<char, unsigned> trace = traces[i];
-                char cmd = trace.first          // the command (read or write)
-                unsigned adr = trace.second;    // the address
-                adr >>= 8;                      // shift right 8 bits
-                unsigned index = adr & mask;    // masking the cache index
-                unsigned tag = adr >> mIndexNum;// shift 6 bits to get the tag
-
-                Block* row = mBlocks[mIndexNum];
-                cout << hitOrMiss(row, tag, cmd);
-                cout << " ";
-	        }
-        }
-
-        // Hit or Miss?
-        string hitOrMiss(const Block* row, unsigned tag, char cmd) {
-            string result;
-            for (size_t i = 0; i < row.size(); i++) {
-                Block block = row[i];
-                if (block.isValid) {        // valid block
-                    if(block.getTag() == tag) {     // same tag?
-                        result = "hit";
-                        // set dirty bit to true if it is a write, otherwise dont do anything
-                        if (cmd == 'w') { block.setDirty(true); }
-                    } else {                // different tag
-                        result = "miss with write-back";
-                        // write-back a new tag
-                        block.setTag(tag);
-                        // set dirty bit to true if it is a write
-                        if (cmd == 'w') {
-                            block.setDirty(true);
-                        } else {    // set it to false if it is a read
-                            block.setDirty(false);
-                        }
-                    }
-                } else {                    // invalid block
-                    result = "miss";
-                    block.setTag(tag);
-                    // set dirty bit to true if it is a write, otherwise dont do anything
-                    if (cmd == 'w') { block.setDirty(true); }
-                }
-                // set block valid
-                block.setValid(true);
-            }
-            return result;
-        }
-}; 
-
 class Block {
-	private:
-		// properties
-        bool valid = false;
-        bool dirty = false;
-        unsigned tag = 0;
-    public:
-		// getters
-		bool isValid {return valid;}
-		bool isDirty {return dirty;}
-		unsigned getTag {return tag;}
-		//setters
-		void setValid(bool valid) {this.valid = valid;}
-		void setDirty(bool dirty) {this.dirty = dirty;}
-		void setTag(bool tag) {this.tag = tag;}
+
+	private:    // properties
+    bool valid = false;
+    bool dirty = false;
+    unsigned tag = 0;
+
+    public:     // member functions
+    // getters
+    bool isValid {return valid;}
+    bool isDirty {return dirty;}
+    unsigned getTag {return tag;}
+    //setters
+    void setValid(bool valid) {this.valid = valid;}
+    void setDirty(bool dirty) {this.dirty = dirty;}
+    void setTag(unsigned tag) {this.tag = tag;}
 };
 
- Augmment this function to properly perform the 
- cache simulation
-void process(char cmd, unsigned addr)
-{
-    cout << "Command: " << cmd 
-         << ", address: " << dec << addr
-         << " (hex " << hex << addr << ')' << endl;
-}
+class Cache {
+	private:    // properties
+    unsigned mMemory;
+    unsigned mBlockSize;
+    unsigned mWayNum;       // number of ways
+    unsigned mIndexNum;     // number of cache indexes
+    Block *mBlocks;         // the cache
+
+    public:
+    // Constructor
+    Cache(unsigned memory, unsigned blockSize, unsigned wayNum) 
+        : mMemory(memory), mBlockSize(blockSize), mWayNum(wayNum),
+        mIndexNum(mMemory/(mBlockSize * mWayNum)) {
+            // initialize the cache size as a multidimensional array
+            mBlocks = new Block[mIndexNum][mWayNum];
+        }
+
+    // processing commands
+    void process(vector<pair<char, unsigned>> traces, unsigned mask) {
+        for (size_t i = 0; i < traces.size(); i++) {
+            // Get data from each trace
+            pair<char, unsigned> trace = traces[i];
+            char cmd = trace.first          // the command (read or write)
+            unsigned adr = trace.second;    // the address
+            adr >>= 8;                      // shift right 8 bits
+            unsigned index = adr & mask;    // masking the cache index
+            unsigned tag = adr >> mIndexNum;// shift 6 bits to get the tag
+
+            Block* row = mBlocks[mIndexNum];
+            cout << hitOrMiss(row, tag, cmd);
+            cout << " ";
+        }
+    }
+
+    // Hit or Miss?
+    string hitOrMiss(const Block* row, unsigned tag, char cmd) {
+        string result;
+        for (size_t i = 0; i < row.size(); i++) {
+            Block block = row[i];
+            if (block.isValid) {        // valid block
+                if(block.getTag() == tag) {     // same tag?
+                    result = "hit";
+                    // set dirty bit to true if it is a write, otherwise dont do anything
+                    if (cmd == 'w') { block.setDirty(true); }
+                } else {                // different tag
+                    result = "miss with write-back";
+                    // write-back a new tag
+                    block.setTag(tag);
+                    // set dirty bit to true if it is a write
+                    if (cmd == 'w') {
+                        block.setDirty(true);
+                    } else {    // set it to false if it is a read
+                        block.setDirty(false);
+                    }
+                }
+            } else {                    // invalid block
+                result = "miss";
+                block.setTag(tag);
+                // set dirty bit to true if it is a write, otherwise dont do anything
+                if (cmd == 'w') { block.setDirty(true); }
+            }
+            // set block valid
+            block.setValid(true);
+        }
+        return result;
+    }
+}; 
 
 int main(int argc, char** argv)
 {
