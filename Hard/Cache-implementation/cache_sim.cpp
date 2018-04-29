@@ -40,7 +40,7 @@ class Cache {
     Cache(unsigned memory, unsigned blockSize, unsigned wayNum) 
         : mMemory(memory), mBlockSize(blockSize), mWayNum(wayNum),
         mIndexNum(mMemory/(mBlockSize * mWayNum)) {
-            // initialize the cache size as a multidimensional array
+            // initialize the cache as a multidimensional array
             mBlocks = new Block[mIndexNum][mWayNum];
         }
 
