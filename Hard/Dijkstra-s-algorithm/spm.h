@@ -11,4 +11,5 @@ AdjacencyMatrix make_spm_dijkstra(const AdjacencyMatrix& in);
 // matrix using dynamic programming.
 AdjacencyMatrix make_spm_dp(const AdjacencyMatrix& in);
 
+bool connected(const AdjacencyMatrix&m, int v, int w);
 #endif

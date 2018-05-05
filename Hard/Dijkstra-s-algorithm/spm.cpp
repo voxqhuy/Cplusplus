@@ -8,6 +8,8 @@
 #include <climits>      // INT_MAX
 #include <queue>        // std::priority_queue
 #include <algorithm>    // std::fill_n
+#include <cstddef>
+#include <iostream>
 #include "spm.h"
 #include "graph.h"
 
@@ -144,6 +146,19 @@ AdjacencyMatrix make_spm_dp(const AdjacencyMatrix& in) {
         }
     }
     return spm;
+}
+
+bool connected(const AdjacencyMatrix& m, int v, int w) {
+    if (v == w) {return false;}
+    if (m[v][w] == 1) {return true;}
+    for (int i = 0; i < m[v].size(); i++) {
+        if ((i != v) && (i != w)) {
+            if (connected(m, v, i) && connected(m, i, w)) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 /*                                  RESULTS REPORT  

@@ -13,6 +13,8 @@ struct Node {
     Node *right;
     Node (const int d, Node *lf, Node *rt) :
         data(d), left(lf), right(rt) {}
+
+    Node () {}
 };
 
 // Calculate the distance from the root to the closest node
@@ -367,4 +369,6 @@ int main() {
     cout << equals(node14, node15);
     cout << equals(node12, node13);
     cout << equals(node15, node16);
+    cout << equals(new Node(), new Node());
+    cout << equals(new Node(), node7);
 }
